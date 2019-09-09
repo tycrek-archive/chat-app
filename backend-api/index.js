@@ -1,8 +1,12 @@
+// NPM modules
 var express     = require('express');
 var compression = require('compression');
 
-var app = express();
+// Local imports
+var psql = require('./sql/psql');
 
+// Express setup
+var app = express();
 app.use(compression());
 
 
