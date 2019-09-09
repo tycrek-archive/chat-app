@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tycrek/chat-app#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^7.12.1"
   }
 }
