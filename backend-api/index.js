@@ -1,5 +1,5 @@
 // NPM modules
-var express     = require('express');
+var express = require('express');
 var compression = require('compression');
 
 // Local imports
@@ -39,4 +39,8 @@ app.get('/', (req, res) => res.status(200).send('Homepage'));
 
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server
-app.listen(8081);
+app.listen(8081, () => { console.log('Hosting') });
+psql.init();
+psql.query1();
+psql.query2();
+psql.kill();
