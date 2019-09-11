@@ -30,3 +30,5 @@ async function kill() {
 	await pool.end();
 	console.log('killed');
 }
+
+//TODO: change bigserial to uuid type for all identifiers
