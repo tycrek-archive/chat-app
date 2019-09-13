@@ -22,7 +22,8 @@ async function query1() {
 
 async function query2() {
 	// method 2: async/await
-	const res = await pool.query('SELECT NOW()');
+	//const res = await pool.query('SELECT NOW()');
+	const res = await pool.query('SELECT * FROM messages;');
 	console.log(res);
 }
 
