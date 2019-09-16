@@ -37,4 +37,13 @@ router.get('/create/:name/:pass', (req, res) => {
 //      user uuid and token must both be provided to server
 //      if current timestamp is past expiry, token is invalid
 //        and deleted from table
+
+router.get('/list', (req, res) => {
+	psql.accountList(10).then((dataset) => {
+		res.status(200).send(dataset);
+	}).catch((err) => {
+		res.status(200).send(err);
+	})
+});
+
 module.exports = router;

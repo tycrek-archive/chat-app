@@ -56,6 +56,18 @@ exports.getAccountUuid = (name) => {
 	});
 }
 
+exports.accountList = (max = 100) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			text: 'SELECT * FROM users LIMIT $1;',
+			values: [max]
+		};
+		pool.query(query).then((res) => {
+			resolve(res.rows);
+		}).catch((err) => reject(err));
+	});
+}
+
 //TODO: getHash must use UUID
 //TODO: unique values on sql
 //TODO: check if sql succeeded
