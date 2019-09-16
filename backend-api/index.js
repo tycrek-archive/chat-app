@@ -3,7 +3,8 @@ var express = require('express');
 var compression = require('compression');
 
 // Local imports
-var psql = require('./sql/psql');
+//var psql = require('./sql/psql');
+//var uuid = require('./tools/uuid');
 
 // Express setup
 var app = express();
@@ -40,7 +41,3 @@ app.get('/', (req, res) => res.status(200).send('Homepage'));
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server
 app.listen(8081, () => { console.log('Hosting') });
-psql.init();
-psql.query1();
-psql.query2();
-psql.kill();
