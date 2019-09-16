@@ -6,7 +6,7 @@ exports.test = () => {
 	//this.bcrypt();
 	//this.uuid();
 	//this.createUser();
-	this.testUser();
+	//this.testUser();
 }
 
 exports.bcrypt = () => {
