@@ -1,0 +1,1 @@
+SELECT hash FROM users WHERE name LIKE $1;

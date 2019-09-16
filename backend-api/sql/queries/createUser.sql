@@ -1,0 +1,1 @@
+INSERT INTO users(name,uuid,hash) VALUES($1, $2, $3);
