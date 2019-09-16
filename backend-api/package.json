@@ -19,6 +19,7 @@
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "uuid": "^3.3.3"
   }
 }
