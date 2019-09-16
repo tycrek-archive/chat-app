@@ -4,7 +4,6 @@ var compression = require('compression');
 
 // Local imports
 var utils = require('./utils');
-var tests = require('./tests.js');
 
 // Express setup
 var app = express();
@@ -46,10 +45,6 @@ utils.init().then(() => {
 	app.listen(port, () => {
 		console.log(`Server hosted on: ${port}`);
 	});
-
-	// tests
-	tests.bcrypt();
-	tests.uuid();
 }).catch((err) => {
 	console.error(err);
 });

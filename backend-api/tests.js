@@ -1,3 +1,8 @@
+exports.test = () => {
+	this.bcrypt();
+	this.uuid();
+}
+
 exports.bcrypt = () => {
 	var bcrypt = require('./tools/bcrypt');
 	let hash = '';
