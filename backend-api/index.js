@@ -10,6 +10,7 @@ var utils = require('./utils');
 // Express setup
 var app = express();
 app.use(compression());
+app.use('/account', require('./routers/account'));
 
 
 //// Routes
