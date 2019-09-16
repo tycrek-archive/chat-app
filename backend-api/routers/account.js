@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var psql = require('../sql/psql');
 var Uuid = require('../tools/uuid');
-var password = require('../tools/password');
+var password = require('../tools/auth');
 var bcrypt = require('../tools/bcrypt');
 
 // jacob15, 1234WorDA6789!@
