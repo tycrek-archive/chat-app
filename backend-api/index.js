@@ -5,6 +5,7 @@ var compression = require('compression');
 // Local imports
 //var psql = require('./sql/psql');
 //var uuid = require('./tools/uuid');
+var utils = require('./utils');
 
 // Express setup
 var app = express();
@@ -40,4 +41,8 @@ app.get('/', (req, res) => res.status(200).send('Homepage'));
 
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server
-app.listen(8081, () => { console.log('Hosting') });
+utils.init(true).then(() => {
+	app.listen(8081, () => { console.log('Hosting') });
+}).catch(() => {
+	console.log('Error');
+});
