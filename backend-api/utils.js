@@ -1,4 +1,6 @@
 var fse = require('fs-extra');
+var psql = require('./sql/psql');
+var utils = this;
 
 var config = {};
 
@@ -10,7 +12,7 @@ exports.init = () => {
 	return new Promise((resolve, reject) => {
 		_readConfig().then(() => {
 			_connectSql().then(() => {
-				require('./tests');
+				require('./tests').test();
 				resolve();
 			}).catch((err) => reject(err));
 		}).catch((err) => reject(err));
@@ -18,7 +20,7 @@ exports.init = () => {
 
 	function _readConfig() {
 		return new Promise((resolve, reject) => {
-			fse.readFile(getPath('config.json'), (err, data) => {
+			fse.readFile(utils.getPath('config.json'), (err, data) => {
 				if (err) reject(err);
 				else {
 					config = JSON.parse(data.toString());
@@ -29,11 +31,13 @@ exports.init = () => {
 	}
 	function _connectSql() {
 		return new Promise((resolve, reject) => {
-			resolve();
+			psql.init().then(() => {
+				resolve();
+			}).catch((err) => reject(err));
 		});
 	}
 }
 
-function getPath(filename) {
+exports.getPath = (filename) => {
 	return require('path').join(__dirname, filename);
 }

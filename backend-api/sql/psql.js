@@ -1,35 +1,45 @@
+var utils = require('../utils');
+var fse = require('fs-extra');
 const { Pool, Client } = require('pg');
 
-//TODO: Add SQL connections
-
 var pool;
-exports.init = () => {
-	// pools will use environment variables
-	// for connection information
-	pool = new Pool();
-	console.log(process.env.PGUSER);
-}
-module.exports.query1 = query1;
-module.exports.query2 = query2;
-module.exports.kill = kill;
 
-async function query1() {
-	// method 1: callbacks
-	pool.query('SELECT NOW()', (err, res) => {
-		console.log(err, res);
+exports.init = () => {
+	return new Promise((resolve, reject) => {
+		fse.readJson(utils.getPath('sql/auth.json'), (err, obj) => {
+			if (err) return reject(err);
+
+			pool = new Pool({
+				connectionString: obj.connectionString
+			});
+			resolve();
+		});
 	});
 }
 
-async function query2() {
-	// method 2: async/await
-	//const res = await pool.query('SELECT NOW()');
-	const res = await pool.query('SELECT * FROM messages;');
-	console.log(res);
+exports.createUser = (name, uuid, hash) => {
+	return new Promise((resolve, reject) => {
+		fse.readFile(utils.getPath('sql/queries/createUser.sql'), (err, data) => {
+			if (err) return reject(err);
+			let query = {
+				text: data.toString(),
+				values: [name, uuid, hash]
+			}
+			pool.query(query).then(() => {
+				resolve();
+			}).catch((err) => reject(err));
+		});
+	});
 }
 
-async function kill() {
-	await pool.end();
-	console.log('killed');
+exports.getHash = (name) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			text: 'SELECT hash FROM users WHERE name LIKE $1;',
+			values: [name]
+		}
+		pool.query(query).then((res) => {
+			resolve(res.rows[0]);
+		}).catch((err) => reject(err));
+	});
 }
-
-//TODO: change bigserial to uuid type for all identifiers
