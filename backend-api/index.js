@@ -36,13 +36,16 @@ app.use((req, res, next) => { //TODO: Try and move _checkAuthorized() to a diffe
 	}
 });
 
-//TODO: Add routes
+//TODO: Add routes (research express Routers)
 app.get('/', (req, res) => res.status(200).send('Homepage'));
 
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server
-utils.init(true).then(() => {
-	app.listen(8081, () => { console.log('Hosting') });
-}).catch(() => {
-	console.log('Error');
+utils.init().then(() => {
+	let port = utils.config().port;
+	app.listen(port, () => {
+		console.log(`Server hosted on: ${port}`);
+	});
+}).catch((err) => {
+	console.error(err);
 });

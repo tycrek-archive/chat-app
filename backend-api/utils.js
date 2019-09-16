@@ -1,23 +1,23 @@
 var fse = require('fs-extra');
 
-module.exports = {
-	// variables
-	config: config,
-
-	// functions
-	init: init
-}
-
 var config = {};
 
-function init(debug = false) {
+exports.config = () => {
+	return config;
+};
+
+exports.init = () => {
 	return new Promise((resolve, reject) => {
-		if (!debug) {
-			console.log('not debug mode');
-			resolve();
-		} else {
-			console.log('debug mode');
-			resolve();
-		}
+		fse.readFile(getPath('config.json'), (err, data) => {
+			if (err) reject(err);
+			else {
+				config = JSON.parse(data.toString());
+				resolve();
+			}
+		});
 	});
+}
+
+function getPath(filename) {
+	return require('path').join(__dirname, filename);
 }
