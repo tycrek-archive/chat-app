@@ -24,7 +24,7 @@ exports.createUser = (name, uuid, hash) => {
 			let query = {
 				text: data.toString(),
 				values: [name, uuid, hash]
-			}
+			};
 			pool.query(query).then(() => {
 				resolve();
 			}).catch((err) => reject(err));
@@ -37,9 +37,25 @@ exports.getHash = (name) => {
 		let query = {
 			text: 'SELECT hash FROM users WHERE name LIKE $1;',
 			values: [name]
-		}
+		};
 		pool.query(query).then((res) => {
 			resolve(res.rows[0]);
 		}).catch((err) => reject(err));
 	});
 }
+
+exports.getAccountUuid = (name) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			text: 'SELECT uuid FROM users WHERE name LIKE $1;',
+			values: [name]
+		};
+		pool.query(query).then((res) => {
+			resolve(res.rows[0]);
+		}).catch((err) => reject(err));
+	});
+}
+
+//TODO: getHash must use UUID
+//TODO: unique values on sql
+//TODO: check if sql succeeded
