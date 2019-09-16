@@ -31,5 +31,10 @@ router.get('/create/:name/:pass', (req, res) => {
 		});
 	}
 });
-
+//TODO: login with tokens
+//      tokens stored in SQL with "sessions" table:
+//      session uuid, user uuid, token, expiry
+//      user uuid and token must both be provided to server
+//      if current timestamp is past expiry, token is invalid
+//        and deleted from table
 module.exports = router;
