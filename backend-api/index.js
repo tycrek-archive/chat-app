@@ -7,6 +7,7 @@ var utils = require('./utils');
 
 // Express setup
 var app = express();
+module.exports = app;
 app.use(compression());
 app.use('/account', require('./routers/account'));
 
