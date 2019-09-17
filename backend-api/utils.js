@@ -41,3 +41,6 @@ exports.init = () => {
 exports.getPath = (filename) => {
 	return require('path').join(__dirname, filename);
 }
+
+exports.str2b64 = (str) => Buffer.from(str).toString('base64');
+exports.b642str = (str) => Buffer.from(str, 'base64').toString();
