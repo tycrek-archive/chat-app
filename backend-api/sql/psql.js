@@ -85,38 +85,23 @@ exports.init = () => {
 	}
 }
 
-exports.createUser = (name, uuid, hash) => {
-	return new Promise((resolve, reject) => {
-		fse.readFile(utils.getPath('sql/queries/createUser.sql'), (err, data) => {
-			if (err) return reject(err);
-			let query = {
-				text: data.toString(),
-				values: [name, uuid, hash]
-			};
-			pool.query(query).then(() => {
-				resolve();
-			}).catch((err) => reject(err));
-		});
-	});
-}
-
-exports.getHash = (name) => {
+exports.accountCreate = (name, uuid, hash) => {
 	return new Promise((resolve, reject) => {
 		let query = {
-			text: 'SELECT hash FROM users WHERE name LIKE $1;',
-			values: [name]
+			text: QUERIES.account.create,
+			values: [name, uuid, hash]
 		};
-		pool.query(query).then((res) => {
-			resolve(res.rows[0]);
+		pool.query(query).then(() => {
+			resolve();
 		}).catch((err) => reject(err));
 	});
 }
 
-exports.getAccountUuid = (name) => {
+exports.accountInfo = (mode, value) => {
 	return new Promise((resolve, reject) => {
 		let query = {
-			text: 'SELECT uuid FROM users WHERE name LIKE $1;',
-			values: [name]
+			text: QUERIES.account.info,
+			values: [mode === 0 ? 'uuid' : 'name', value]
 		};
 		pool.query(query).then((res) => {
 			resolve(res.rows[0]);
