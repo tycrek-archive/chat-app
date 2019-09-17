@@ -2,7 +2,7 @@
 	"port": 34682,
 
 	"queries": {
-		"segments": ["account", "authentication"],
+		"segments": ["account", "authentication", "session"],
 		"account": {
 			"create": "account.create.sql",
 			"info": "account.info.sql"
@@ -11,6 +11,9 @@
 			"credential": "authentication.credential.sql",
 			"token": "authentication.token.sql",
 			"expire": "authentication.expire.sql"
+		},
+		"session": {
+			"create": "session.create.sql"
 		}
 	}
 }
