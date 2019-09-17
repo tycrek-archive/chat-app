@@ -2,10 +2,13 @@
 	"port": 34682,
 
 	"queries": {
-		"segments": ["account"],
+		"segments": ["account", "authentication"],
 		"account": {
 			"create": "account.create.sql",
 			"info": "account.info.sql"
+		},
+		"authentication": {
+			"": ""
 		}
 	}
 }
