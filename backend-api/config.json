@@ -8,7 +8,9 @@
 			"info": "account.info.sql"
 		},
 		"authentication": {
-			"": ""
+			"credential": "authentication.credential.sql",
+			"token": "authentication.token.sql",
+			"expire": "authentication.expire.sql"
 		}
 	}
 }
