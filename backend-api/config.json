@@ -1,5 +1,6 @@
 {
 	"port": 34682,
+	"saltRounds": 10,
 
 	"queries": {
 		"segments": ["account", "authentication", "session"],

@@ -1,6 +1,4 @@
 let psql = require('./sql/psql');
-var uuid = require('./tools/uuid');
-var bcrypt = require('./tools/bcrypt');
 var utils = require('./utils');
 
 exports.test = () => {

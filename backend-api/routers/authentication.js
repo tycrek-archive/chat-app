@@ -1,26 +1,24 @@
 var router = require('express').Router();
 var psql = require('../sql/psql');
-var bcrypt = require('../tools/bcrypt');
-var uuid = require('../tools/uuid');
-var Token = require('../tools/token');
+var utils = require('../utils');
 
 router.get('/credentials/:username/:password', (req, res) => {
 	let username = req.params.username;
-	let password = req.params.password;
+	let password = utils.b642str(req.params.password);
 
 	// first check if user exists
-	psql.accountInfo(0, username).then((dataset) => {
+	psql.accountInfo('NAME', username).then((dataset) => {
 		if (dataset.length === 0) {
 			_send('Invalid username or password!');
 		} else {
 			// second, check the password
-			bcrypt.compare(password, dataset[0].hash).then((same) => {
+			utils.comparePassHash(password, dataset[0].hash).then((same) => {
 				if (!same) _send('Invalid username or password!');
 				else {
 					// create a new session
-					let session_id = uuid.generate();
+					let session_id = utils.generateUuid();
 					let user_uuid = dataset[0].uuid;
-					let token = Token.generate();
+					let token = utils.generateToken();
 
 					psql.sessionCreate(session_id, user_uuid, token).then(() => {
 						let response = {

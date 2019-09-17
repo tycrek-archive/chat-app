@@ -100,7 +100,7 @@ exports.accountCreate = (name, uuid, hash) => {
 
 exports.accountInfo = (mode, value) => {
 	return new Promise((resolve, reject) => {
-		let column = mode === 1 ? 'uuid' : 'name';
+		let column = mode !== 'NAME' ? 'uuid' : 'name';
 		let query = {
 			text: format(QUERIES.account.info, column),
 			values: [value]
