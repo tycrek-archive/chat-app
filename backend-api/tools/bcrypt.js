@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const saltRounds = 16;
+const saltRounds = 10;
 
 exports.hash = (password) => {
 	return new Promise((resolve, reject) => {
