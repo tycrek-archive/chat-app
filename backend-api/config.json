@@ -1,3 +1,11 @@
 {
-	"port": 34682
+	"port": 34682,
+
+	"queries": {
+		"segments": ["account"],
+		"account": {
+			"create": "account.create.sql",
+			"info": "account.info.sql"
+		}
+	}
 }
