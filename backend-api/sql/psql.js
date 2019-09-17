@@ -5,6 +5,7 @@ const { Pool, Client } = require('pg');
 var pool;
 var QUERIES = {};
 
+// Initialize connection pool and read queries into RAM
 exports.init = () => {
 	return new Promise((resolve, reject) => {
 		_connect().then(() => {
@@ -26,6 +27,17 @@ exports.init = () => {
 		});
 	}
 
+	// Reads query files into RAM. Query file names
+	// are listed in config.json as a nested object.
+	// Files are read asynchronously, but it is
+	// technically "blocking" since the promise is
+	// not resolved until all files are read. This
+	// is simply to help speed up loading times on
+	// a multithreaded server. Hopefully.
+	//
+	// Since we have to iterate twice (once to get
+	// total number and another to read the files),
+	// we pass functions into a single iterator.
 	function _loadQueries() {
 		return new Promise((resolve, reject) => {
 			let total = 0;
@@ -34,6 +46,8 @@ exports.init = () => {
 			_iterateQueries(resolve, reject, _incrementTotal);
 			_iterateQueries(resolve, reject, _readQuery);
 
+			// Iterate over the query keys defined in config.json
+			// and run the necessary task (a function).
 			function _iterateQueries(resolve, reject, task) {
 				let queries = utils.config().queries;
 				queries.segments.forEach((segment) => {
@@ -44,14 +58,21 @@ exports.init = () => {
 				});
 			}
 
+			// Runs before reading files.
+			// This lets us know when all files have been read.
 			function _incrementTotal() {
 				total++;
 			}
 
+			// Read the query file
 			function _readQuery(segment, key, value, resolve, reject) {
-				let sqlPath = 'sql/queries/';
-				let fullPath = sqlPath + value;
+				let fullPath = 'sql/queries/' + value;
 
+				// Asynchronously read the file. Once the file
+				// has been read, we increase the counter that
+				// indicates how many have been read. Then we
+				// check if the counter is the same as the total,
+				// and we resolve our function.
 				fse.readFile(utils.getPath(fullPath), (err, data) => {
 					if (err) return reject(err);
 					if (!QUERIES.hasOwnProperty(segment)) QUERIES[segment] = {};
