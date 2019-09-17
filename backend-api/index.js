@@ -10,6 +10,7 @@ var app = express();
 module.exports = app;
 app.use(compression());
 app.use('/account', require('./routers/account'));
+app.use('/authentication', require('./routers/authentication'));
 
 
 //// Routes

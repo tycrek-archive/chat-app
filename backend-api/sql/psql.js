@@ -1,6 +1,7 @@
 var utils = require('../utils');
 var fse = require('fs-extra');
 const { Pool, Client } = require('pg');
+var format = require('pg-format');
 
 var pool;
 var QUERIES = {};
@@ -99,13 +100,14 @@ exports.accountCreate = (name, uuid, hash) => {
 
 exports.accountInfo = (mode, value) => {
 	return new Promise((resolve, reject) => {
+		let column = mode === 1 ? 'uuid' : 'name';
 		let query = {
-			text: QUERIES.account.info,
-			values: [mode === 0 ? 'uuid' : 'name', value]
+			text: format(QUERIES.account.info, column),
+			values: [value]
 		};
 		pool.query(query).then((res) => {
 			resolve(res.rows);
-		}).catch((err) => reject(err));
+		}).catch((err) => (console.log(err),reject(err)));
 	});
 }
 
@@ -117,6 +119,18 @@ exports.accountList = (max = 100) => {
 		};
 		pool.query(query).then((res) => {
 			resolve(res.rows);
+		}).catch((err) => reject(err));
+	});
+}
+
+exports.sessionCreate = (session_id, user_uuid, token) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			text: QUERIES.session.create,
+			values: [session_id, user_uuid, token]
+		}
+		pool.query(query).then(() => {
+			resolve();
 		}).catch((err) => reject(err));
 	});
 }

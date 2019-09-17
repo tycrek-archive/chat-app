@@ -1,0 +1,1 @@
+INSERT INTO sessions(session_id,user_uuid,token) VALUES($1, $2, $3);

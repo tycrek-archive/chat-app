@@ -24,19 +24,13 @@ router.get('/create/:name/:pass', (req, res) => {
 				return reject('Bad password');
 			}
 			bcrypt.hash(pass).then((hash) => {
-				psql.createUser(name, uuid, hash).then(() => {
+				psql.accountCreate(name, uuid, hash).then(() => {
 					resolve();
 				}).catch((err) => reject(err));
 			}).catch((err) => reject(err));
 		});
 	}
 });
-//TODO: login with tokens
-//      tokens stored in SQL with "sessions" table:
-//      session uuid, user uuid, token, expiry
-//      user uuid and token must both be provided to server
-//      if current timestamp is past expiry, token is invalid
-//        and deleted from table
 
 router.get('/list', (req, res) => {
 	psql.accountList(10).then((dataset) => {
