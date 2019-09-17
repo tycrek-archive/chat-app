@@ -120,8 +120,3 @@ exports.accountList = (max = 100) => {
 		}).catch((err) => reject(err));
 	});
 }
-
-//TODO: getHash must use UUID
-//TODO: unique values on sql
-//TODO: check if sql succeeded
-//TODO: get account from name or uuid (whole object)
