@@ -104,7 +104,7 @@ exports.accountInfo = (mode, value) => {
 			values: [mode === 0 ? 'uuid' : 'name', value]
 		};
 		pool.query(query).then((res) => {
-			resolve(res.rows[0]);
+			resolve(res.rows);
 		}).catch((err) => reject(err));
 	});
 }
