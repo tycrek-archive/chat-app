@@ -2,9 +2,10 @@ var fse = require('fs-extra');
 var uuidv4 = require('uuid/v4');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
+var moment = require('moment');
 
 
-var psql = require('./sql/psql');
+var Psql = require('./sql/psql');
 var utils = this;
 
 var config = {};
@@ -36,7 +37,7 @@ exports.init = () => {
 	}
 	function _connectSql() {
 		return new Promise((resolve, reject) => {
-			psql.init().then(() => {
+			Psql.init().then(() => {
 				resolve();
 			}).catch((err) => reject(err));
 		});
@@ -88,4 +89,44 @@ exports.passwordMeetsRequirements = (password) => {
 		password.match(SYMBOL).length >= MIN_EACH
 	) return true;
 	else return false;
+}
+
+// sends an express respnse.
+// with multiple routers, utils makes more sense
+exports.respond = (res, payload, status = 200, type = 'json') => {
+	res.status(status);
+	res.type(type);
+	res.send(payload);
+}
+
+exports.utcStamp = () => moment.utc().format('x');
+exports.tdFormat = (td, f) => moment(td, f).utc().format(f);
+
+exports.validate = (req) => {
+	return new Promise((resolve, reject) => {
+		let path = req.path;
+		let token = req.query.token;
+
+		if (_isPublicRoute(path)) return resolve();
+		if (token == null) return reject('401::Unauthorized');
+
+		Psql.sessionGet(token).then((dataset) => {
+			if (dataset.length === 0) reject();
+			else {
+				let now = utils.utcStamp();
+				let expiry = utils.tdFormat(dataset[0].expiry, 'x');
+				if (expiry > now) resolve();
+				else reject('403::Forbidden');
+			}
+		})
+	});
+
+	function _isPublicRoute(path) {
+		let routes = utils.config().publicRoutes;
+		for (i = 0; i < routes.length; i++) {
+			route = routes[i];
+			if (path === '/' || path.includes(route)) return true;
+		}
+		return false;
+	}
 }

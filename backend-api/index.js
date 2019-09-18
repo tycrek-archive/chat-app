@@ -4,41 +4,42 @@ var compression = require('compression');
 
 // Local imports
 var utils = require('./utils');
+var Routers = {
+	user: require('./routers/user')
+};
 
 // Express setup
 var app = express();
 module.exports = app;
 app.use(compression());
-app.use('/account', require('./routers/account'));
-app.use('/authentication', require('./routers/authentication'));
+
 
 
 //// Routes
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => { //TODO: Try and move _checkAuthorized() to a different file
-	_checkAuthorized(req, (isAuthenticated, isAuthorized, reason) => {
-		if (isAuthorized) {
-			// User authorized. Do not check authenticated as some endpoints are public (login)
-			next();
-		}
-		else if (isAuthenticated && !isAuthorized) {
-			// Logged in, but cannot access this resource
-			res.status(403).send(`403: Forbidden: ${reason}`);
-		} else {
-			// Not logged in
-			res.status(401).send(`401: Unauthorized: ${reason}`);
-		}
-	});
 
-	function _checkAuthorized(req, callback) {
-		//TODO: Check the request headers for a valid token
-		callback(false, true, 'Failure reason')
-	}
+	return utils.validate(req).then(() => {
+		next();
+	}).catch((err) => {
+		let code = err.split('::')[0];
+		let data = {
+			status: code,
+			reason: err.split('::')[1]
+		};
+		utils.respond(res, data, code);
+	});
 });
 
-//TODO: Add routes (research express Routers)
-app.get('/', (req, res) => res.status(200).send('Homepage'));
+app.get('/', (req, res) => {
+	require('fs-extra').readFile(utils.getPath('index.html'), (err, data) => {
+		if (err) return utils.respond(res, err, 500, 'text');
+		utils.respond(res, data.toString(), 200, 'html');
+	});
+});
+
+app.use('/user', Routers.user);
 
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server

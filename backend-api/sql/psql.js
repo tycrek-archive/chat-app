@@ -28,6 +28,34 @@ exports.init = () => {
 		});
 	}
 
+	function _loadQueries() {
+		return new Promise((resolve, reject) => {
+			let total = utils.config().qs.length;
+			let count = 0;
+
+			utils.config().qs.forEach((query) => {
+				let category = query.split('.')[0];
+				let command = query.split('.')[1];
+
+				_readQuery(category, command, resolve, reject);
+			});
+
+			// Read the query file
+			function _readQuery(category, command, resolve, reject) {
+				let fullPath = `sql/queries/${category}.${command}.sql`;
+
+				fse.readFile(utils.getPath(fullPath), (err, data) => {
+					if (err) return reject(err);
+					if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
+
+					QUERIES[category][command] = data.toString();
+					count++;
+					if (count === total) resolve();
+				});
+			}
+		});
+	}
+
 	// Reads query files into RAM. Query file names
 	// are listed in config.json as a nested object.
 	// Files are read asynchronously, but it is
@@ -39,7 +67,7 @@ exports.init = () => {
 	// Since we have to iterate twice (once to get
 	// total number and another to read the files),
 	// we pass functions into a single iterator.
-	function _loadQueries() {
+	function _loadQueriesOld() {
 		return new Promise((resolve, reject) => {
 			let total = 0;
 			let count = 0;
@@ -86,10 +114,10 @@ exports.init = () => {
 	}
 }
 
-exports.accountCreate = (name, uuid, hash) => {
+exports.userCreate = (name, uuid, hash) => {
 	return new Promise((resolve, reject) => {
 		let query = {
-			text: QUERIES.account.create,
+			text: QUERIES.user.create,
 			values: [name, uuid, hash]
 		};
 		pool.query(query).then(() => {
@@ -98,16 +126,16 @@ exports.accountCreate = (name, uuid, hash) => {
 	});
 }
 
-exports.accountInfo = (mode, value) => {
+exports.userInfo = (mode, value) => {
 	return new Promise((resolve, reject) => {
 		let column = mode !== 'NAME' ? 'uuid' : 'name';
 		let query = {
-			text: format(QUERIES.account.info, column),
+			text: format(QUERIES.user.info, column),
 			values: [value]
 		};
 		pool.query(query).then((res) => {
 			resolve(res.rows);
-		}).catch((err) => (console.log(err),reject(err)));
+		}).catch((err) => reject(err));
 	});
 }
 
@@ -131,6 +159,18 @@ exports.sessionCreate = (session_id, user_uuid, token) => {
 		}
 		pool.query(query).then(() => {
 			resolve();
+		}).catch((err) => reject(err));
+	});
+}
+
+exports.sessionGet = (token) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			text: QUERIES.session.get,
+			values: [token]
+		};
+		pool.query(query).then((res) => {
+			resolve(res.rows);
 		}).catch((err) => reject(err));
 	});
 }
