@@ -2,19 +2,17 @@
 	"port": 34682,
 	"saltRounds": 10,
 
-	"queries": {
-		"segments": ["account", "authentication", "session"],
-		"account": {
-			"create": "account.create.sql",
-			"info": "account.info.sql"
-		},
-		"authentication": {
-			"credential": "authentication.credential.sql",
-			"token": "authentication.token.sql",
-			"expire": "authentication.expire.sql"
-		},
-		"session": {
-			"create": "session.create.sql"
-		}
-	}
+	"publicRoutes": ["/user/login", "/user/create"],
+	"routes": {
+		"user": ["login", "logout"]
+	},
+	"qs": [
+		"session.create",
+		"session.renew",
+		"session.expire",
+		"session.get",
+
+		"user.create",
+		"user.info"
+	]
 }
