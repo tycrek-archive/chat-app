@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script type="text/javascript">
+			var login = () => {
+				let username = document.getElementById('login-username').value;
+				let password = document.getElementById('login-password').value;
+				let encpass = btoa(password);
+				fetch(`/user/login/${username}/${encpass}`)
+				.then((res) => {
+					return res.text;
+				}).then((json) => {
+					document.getElementById('login-result').html = json;
+					alert(json);
+				});
+			};
+		</script>
+	</head>
+	<body>
+		<h1>App tests</h1>
+		<hr>
+
+		<h2>Run any query</h2>
+		<form onsubmit="query()">
+			<input id="query" type="text"><br>
+			<input type="submit">
+		</form>
+		<code id="query-result"></code>
+
+		<hr>
+
+		<h2>Create new user</h2>
+		<form onsubmit="newUser()">
+			Username: <input id="newuser-username" type="text"><br>
+			Password: <input id="newuser-password" type="text"><br>
+			<input type="submit">
+		</form>
+		<code id="newuser-result"></code>
+
+		<hr>
+
+		<h2>Login user</h2>
+		<form id="login-form">
+			Username: <input id="login-username" type="text"><br>
+			Password: <input id="login-password" type="text"><br>
+			<input type="button" onclick="login()" value="Login">
+		</form>
+		<code id="login-result"></code>
+	</body>
+</html>
