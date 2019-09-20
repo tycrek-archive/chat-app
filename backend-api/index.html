@@ -9,10 +9,9 @@
 				let encpass = btoa(password);
 				fetch(`/user/login/${username}/${encpass}`)
 				.then((res) => {
-					return res.text;
+					return res.json();
 				}).then((json) => {
-					document.getElementById('login-result').html = json;
-					alert(json);
+					$('#login-result').html(JSON.stringify(json));
 				});
 			};
 		</script>
@@ -26,7 +25,7 @@
 			<input id="query" type="text"><br>
 			<input type="submit">
 		</form>
-		<code id="query-result"></code>
+		<code id="query-result">&nbsp;</code>
 
 		<hr>
 
@@ -36,7 +35,7 @@
 			Password: <input id="newuser-password" type="text"><br>
 			<input type="submit">
 		</form>
-		<code id="newuser-result"></code>
+		<code id="newuser-result">&nbsp;</code>
 
 		<hr>
 
@@ -46,6 +45,6 @@
 			Password: <input id="login-password" type="text"><br>
 			<input type="button" onclick="login()" value="Login">
 		</form>
-		<code id="login-result"></code>
+		<code id="login-result">&nbsp;</code>
 	</body>
 </html>
