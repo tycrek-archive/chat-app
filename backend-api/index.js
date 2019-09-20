@@ -16,7 +16,7 @@ app.use(compression());
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => {
-	return utils.validate(req)
+	utils.validate(req)
 		.then(() => next())
 		.catch((err) => {
 			let code = err.split('::')[0];
