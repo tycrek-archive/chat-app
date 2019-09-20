@@ -120,7 +120,7 @@ exports.validate = (req) => {
 				if (expiry > now) resolve();
 				else reject('403::Forbidden');
 			}
-		})
+		})//TODO: this needs a catch
 	});
 
 	function _isPublicRoute(path) {
