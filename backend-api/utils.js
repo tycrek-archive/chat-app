@@ -9,10 +9,7 @@ var Psql = require('./sql/psql');
 var utils = this;
 
 var config = {};
-
-exports.config = () => {
-	return config;
-};
+exports.config = () => config;
 
 exports.init = () => {
 	return new Promise((resolve, reject) => {
