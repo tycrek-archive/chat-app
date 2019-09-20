@@ -59,11 +59,12 @@ exports.generateHash = (password) => {
 	});
 }
 
+// Compare a password with a hash
 exports.comparePassHash = (password, hash) => {
 	return new Promise((resolve, reject) => {
-		bcrypt.compare(password, hash, (err, same) => {
-			err ? reject(err) : resolve(same);
-		});
+		bcrypt.compare(password, hash)
+			.then((same) => resolve(same))
+			.catch((err) => reject(err));
 	});
 }
 
