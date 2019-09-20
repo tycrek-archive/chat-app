@@ -11,32 +11,24 @@ var utils = this;
 var config = {};
 exports.config = () => config;
 
+// Initialize the server (read configs and connect to SQL)
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		_readConfig().then(() => {
-			_connectSql().then(() => {
-				require('./tests').test();
-				resolve();
-			}).catch((err) => reject(err));
-		}).catch((err) => reject(err));
+		_readConfig()
+			.then(() => _connectSql())
+			.then(() => resolve())
+			.catch((err) => reject(err));
 	});
 
 	function _readConfig() {
-		return new Promise((resolve, reject) => {
-			fse.readFile(utils.getPath('config.json'), (err, data) => {
-				if (err) reject(err);
-				else {
-					config = JSON.parse(data.toString());
-					resolve();
-				}
-			});
-		});
+		return new Promise((resolve, reject) => fse.readJson(utils.getPath('config.json'), (err, data) => err ? reject(err) : (config = data, resolve())));
 	}
+
 	function _connectSql() {
 		return new Promise((resolve, reject) => {
-			Psql.init().then(() => {
-				resolve();
-			}).catch((err) => reject(err));
+			Psql.init()
+				.then(() => resolve())
+				.catch((err) => reject(err));
 		});
 	}
 }
