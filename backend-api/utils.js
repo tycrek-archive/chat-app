@@ -68,6 +68,7 @@ exports.comparePassHash = (password, hash) => {
 	});
 }
 
+// Check if the password meets the requirements
 exports.passwordMeetsRequirements = (password) => {
 	let MIN_LENGTH = 12;
 	let MIN_EACH   = 2;
@@ -86,17 +87,21 @@ exports.passwordMeetsRequirements = (password) => {
 	else return false;
 }
 
-// sends an express respnse.
-// with multiple routers, utils makes more sense
+// Send an Express response
+// (with multiple routers, having this done here makes more sense)
 exports.respond = (res, payload, status = 200, type = 'json') => {
 	res.status(status);
 	res.type(type);
 	res.send(payload);
 }
 
+// Return the current UTC timestamp in Unix format
 exports.utcStamp = () => moment.utc().format('x');
+
+// Convert the provided timestamp into Unix format as UTC time
 exports.tdFormat = (td, f) => moment(td, f).utc().format(f);
 
+// Validate if a token is permitted to access the requested resource
 exports.validate = (req) => {
 	return new Promise((resolve, reject) => {
 		let path = req.path;
