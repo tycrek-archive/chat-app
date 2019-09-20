@@ -17,17 +17,16 @@ app.use(compression());
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => {
-
-	return utils.validate(req).then(() => {
-		next();
-	}).catch((err) => {
-		let code = err.split('::')[0];
-		let data = {
-			status: code,
-			reason: err.split('::')[1]
-		};
-		utils.respond(res, data, code);
-	});
+	return utils.validate(req)
+		.then(() => next())
+		.catch((err) => {
+			let code = err.split('::')[0];
+			let data = {
+				status: code,
+				reason: err.split('::')[1]
+			};
+			utils.respond(res, data, code);
+		});
 });
 
 app.get('/', (req, res) => {
