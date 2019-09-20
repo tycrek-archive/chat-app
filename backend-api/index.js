@@ -41,13 +41,15 @@ app.use('/user', Routers.user);
 
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server
-utils.init().then(() => {
-	let port = utils.config().port;
-	app.listen(port, () => {
-		console.log(`Server hosted on: ${port}`);
+utils.init()
+	.then(() => {
+		let port = utils.config().port;
+		app.listen(port, () => {
+			console.log(`Server hosted on: ${port}`);
+		});
+	})
+	.catch((err) => {
+		console.error(err);
 	});
-}).catch((err) => {
-	console.error(err);
-});
 
 module.exports = app;
