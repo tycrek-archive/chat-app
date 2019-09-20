@@ -7,12 +7,20 @@ router.get('/create/:name/:pass', (req, res) => {
 	let pass = utils.b642str(req.params.pass);
 	let uuid = utils.generateUuid();
 
+	let response = {
+		status: 200,
+		success: true,
+		error: null
+	};
+
 	_createAccount(name, pass, uuid).then(() => {
-		console.log(`User ${name} created`);
-		res.status(200).send('Created');
+		utils.respond(res, response);
 	}).catch((err) => {
 		console.error(err);
-		res.status(200).send(err);
+		response.status = 400;
+		response.success = false;
+		response.error = err;
+		utils.respond(res, response, 400);
 	});
 
 	function _createAccount(name, pass, uuid) {
@@ -20,7 +28,7 @@ router.get('/create/:name/:pass', (req, res) => {
 			if (!utils.passwordMeetsRequirements(pass)) {
 				return reject('Bad password');
 			}
-			utils.generateHash.hash(pass).then((hash) => {
+			utils.generateHash(pass).then((hash) => {
 				Psql.userCreate(name, uuid, hash).then(() => {
 					resolve();
 				}).catch((err) => reject(err));
