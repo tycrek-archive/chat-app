@@ -13,26 +13,22 @@ router.get('/create/:name/:pass', (req, res) => {
 		error: null
 	};
 
-	_createAccount(name, pass, uuid).then(() => {
-		utils.respond(res, response);
-	}).catch((err) => {
-		console.error(err);
-		response.status = 400;
-		response.success = false;
-		response.error = err;
-		utils.respond(res, response, 400);
-	});
+	_createAccount(name, pass, uuid)
+		.then(() => utils.respond(res, response))
+		.catch((err) => {
+			response.status = 400;
+			response.success = false;
+			response.error = err;
+			utils.respond(res, response, 400);
+		});
 
 	function _createAccount(name, pass, uuid) {
 		return new Promise((resolve, reject) => {
-			if (!utils.passwordMeetsRequirements(pass)) {
-				return reject('Bad password');
-			}
-			utils.generateHash(pass).then((hash) => {
-				Psql.userCreate(name, uuid, hash).then(() => {
-					resolve();
-				}).catch((err) => reject(err));
-			}).catch((err) => reject(err));
+			if (!utils.passwordMeetsRequirements(pass)) reject('Bad password');
+			else utils.generateHash(pass)
+				.then((hash) => Psql.userCreate(name, uuid, hash))
+				.then(() => resolve())
+				.catch((err) => reject(err));
 		});
 	}
 });
