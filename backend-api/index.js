@@ -10,10 +10,9 @@ var Routers = {
 
 // Express setup
 var app = express();
-module.exports = app;
-app.use(compression());
 
-// Routes
+// Compress all traffic
+app.use(compression());
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => {
@@ -49,3 +48,5 @@ utils.init().then(() => {
 }).catch((err) => {
 	console.error(err);
 });
+
+module.exports = app;
