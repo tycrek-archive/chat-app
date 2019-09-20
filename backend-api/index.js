@@ -16,7 +16,7 @@ app.use(compression());
 // Routes
 
 // Check authentication requirements for all routes
-app.use((req, res, next) => { //TODO: Try and move _checkAuthorized() to a different file
+app.use((req, res, next) => {
 
 	return utils.validate(req).then(() => {
 		next();
