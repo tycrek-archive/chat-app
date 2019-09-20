@@ -1,5 +1,5 @@
 // NPM modules
-var express = require('express');
+var express     = require('express');
 var compression = require('compression');
 
 // Local imports
@@ -13,9 +13,7 @@ var app = express();
 module.exports = app;
 app.use(compression());
 
-
-
-//// Routes
+// Routes
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => { //TODO: Try and move _checkAuthorized() to a different file
