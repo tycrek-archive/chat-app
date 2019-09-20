@@ -76,6 +76,8 @@ exports.passwordMeetsRequirements = (password) => {
 	let UPPER      = new RegExp(/[A-Z]/g);
 	let NUMBER     = new RegExp(/[0-9]/g);
 	let SYMBOL     = new RegExp(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g);
+	//TODO: Fix regex (do I need to have () or not?)
+	//TODO: Any characters not included in the above should be denied (maybe?)
 
 	if (
 		password.length >= MIN_LENGTH &&
