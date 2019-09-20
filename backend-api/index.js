@@ -36,6 +36,7 @@ app.get('/', (_req, res) => {
 	});
 });
 
+// Router for any 'user' routes
 app.use('/user', Routers.user);
 
 //TODO: Improve app.listen
