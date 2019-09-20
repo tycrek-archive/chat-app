@@ -9,11 +9,10 @@ var QUERIES = {};
 // Initialize connection pool and read queries into RAM
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		_connect().then(() => {
-			_loadQueries().then(() => {
-				resolve();
-			}).catch((err) => reject(err));
-		}).catch((err) => reject(err));
+		_connect()
+			.then(() => _loadQueries())
+			.then(() => resolve())
+			.catch((err) => reject(err));
 	});
 
 	function _connect() {
