@@ -29,10 +29,11 @@ app.use((req, res, next) => {
 		});
 });
 
-app.get('/', (req, res) => {
+// For testing ONLY
+app.get('/', (_req, res) => {
 	require('fs-extra').readFile(utils.getPath('index.html'), (err, data) => {
-		if (err) return utils.respond(res, err, 500, 'text');
-		utils.respond(res, data.toString(), 200, 'html');
+		if (err) utils.respond(res, err, 500, 'text');
+		else utils.respond(res, data.toString(), 200, 'html');
 	});
 });
 
