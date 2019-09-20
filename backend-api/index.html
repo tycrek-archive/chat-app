@@ -21,26 +21,26 @@
 		<hr>
 
 		<h2>Run any query</h2>
-		<form onsubmit="query()">
+		<form>
 			<input id="query" type="text"><br>
-			<input type="submit">
+			<input type="button" onclick="query()" value="Run query">
 		</form>
 		<code id="query-result">&nbsp;</code>
 
 		<hr>
 
 		<h2>Create new user</h2>
-		<form onsubmit="newUser()">
+		<form>
 			Username: <input id="newuser-username" type="text"><br>
 			Password: <input id="newuser-password" type="text"><br>
-			<input type="submit">
+			<input type="button" onclick="newUser()" value="Create user">
 		</form>
 		<code id="newuser-result">&nbsp;</code>
 
 		<hr>
 
 		<h2>Login user</h2>
-		<form id="login-form">
+		<form>
 			Username: <input id="login-username" type="text"><br>
 			Password: <input id="login-password" type="text"><br>
 			<input type="button" onclick="login()" value="Login">
