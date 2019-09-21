@@ -18,11 +18,11 @@ exports.init = () => {
 	function _connect() {
 		return new Promise((resolve, reject) => {
 			fse.readJson(utils.getPath('sql/auth.json'), (err, obj) => {
-				if (err) return reject(err);
-				pool = new Pool({
-					connectionString: obj.connectionString
-				});
-				resolve();
+				if (err) reject(err);
+				else {
+					pool = new Pool({ connectionString: obj.connectionString });
+					resolve();
+				}
 			});
 		});
 	}
