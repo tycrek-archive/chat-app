@@ -14,5 +14,16 @@
 
 		"user.create",
 		"user.info"
-	]
+	],
+
+	"response": {
+		"unauthorized": {
+			"code": 401,
+			"reason": "Unauthorized"
+		},
+		"forbidden": {
+			"code": 403,
+			"reason": "Forbidden"
+		}
+	}
 }
