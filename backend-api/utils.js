@@ -70,7 +70,7 @@ exports.comparePassHash = (password, hash) => {
 // Check if the password meets the requirements
 exports.passwordMeetsRequirements = (password) => {
 	let MIN_LENGTH = 12;
-	let MIN_EACH   = 2;
+	let MIN_EACH   = 1;
 	let LOWER      = new RegExp(/([a-z])/g);
 	let UPPER      = new RegExp(/[A-Z]/g);
 	let NUMBER     = new RegExp(/[0-9]/g);
@@ -110,17 +110,19 @@ exports.validate = (req) => {
 		let token = req.query.token;
 
 		if (_isPublicRoute(path)) return resolve();
-		if (token == null) return reject(utils.config().response.unauthorized);
+		if (token == null || token.length == 0) return reject(utils.config().response.unauthorized);
 
 		Psql.sessionGet(token).then((dataset) => {
-			if (dataset.length === 0) reject();
+			if (dataset.length === 0) reject(utils.config().response.unauthorized);
 			else {
 				let now = utils.utcStamp();
 				let expiry = utils.tdFormat(dataset[0].expiry, 'x');
 				if (expiry > now) resolve();
 				else reject(utils.config().response.forbidden);
 			}
-		})//TODO: this needs a catch
+		}).catch((err) => {
+			reject(utils.buildResponse(500, '500', { err: err }));
+		});
 	});
 
 	function _isPublicRoute(path) {

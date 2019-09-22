@@ -3,29 +3,18 @@ var fse = require('fs-extra');
 const { Pool, Client } = require('pg');
 var format = require('pg-format');
 
-var pool;
+var pool = new Pool({});
 var QUERIES = {};
 
 // Initialize connection pool and read queries into RAM
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		_connect()
+		fse.readJson(utils.getPath('sql/auth.json'))
+			.then((obj) => pool = new Pool(obj))
 			.then(() => _loadQueries())
 			.then(() => resolve())
 			.catch((err) => reject(err));
 	});
-
-	function _connect() {
-		return new Promise((resolve, reject) => {
-			fse.readJson(utils.getPath('sql/auth.json'), (err, obj) => {
-				if (err) reject(err);
-				else {
-					pool = new Pool({ connectionString: obj.connectionString });
-					resolve();
-				}
-			});
-		});
-	}
 
 	function _loadQueries() {
 		return new Promise((resolve, reject) => {
@@ -43,82 +32,37 @@ exports.init = () => {
 			function _readQuery(category, command, resolve, reject) {
 				let fullPath = `sql/queries/${category}.${command}.sql`;
 
-				fse.readFile(utils.getPath(fullPath), (err, data) => {
-					if (err) return reject(err);
-					if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
-
-					QUERIES[category][command] = data.toString();
-					count++;
-					if (count === total) resolve();
-				});
+				fse.readFile(utils.getPath(fullPath))
+					.then((bytes) => {
+						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
+	
+						QUERIES[category][command] = bytes.toString();
+						(count++, count === total) && resolve();
+					})
+					.catch((err) => reject(err));
 			}
 		});
 	}
 }
 
-exports.userCreate = (name, uuid, hash) => {
+exports.userCreate = (name, uuid, hash) => query(QUERIES.user.create, [name, uuid, hash]);
+
+exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'name' : 'uuid']);
+
+exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
+
+exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
+
+exports.anyQuery = (text) => query(text);
+
+function query(text, values, array) {
 	return new Promise((resolve, reject) => {
 		let query = {
-			text: QUERIES.user.create,
-			values: [name, uuid, hash]
+			text: array ? format.withArray(text, array) : text,
+			values: values
 		};
-		pool.query(query).then(() => {
-			resolve();
-		}).catch((err) => reject(err));
-	});
-}
-
-exports.userInfo = (useName, value) => {
-	return new Promise((resolve, reject) => {
-		let column = useName ? 'name' : 'uuid';
-		let query = {
-			text: format(QUERIES.user.info, column),
-			values: [value]
-		};
-		pool.query(query).then((res) => {
-			resolve(res.rows);
-		}).catch((err) => reject(err));
-	});
-}
-
-exports.accountList = (max = 100) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: 'SELECT * FROM users LIMIT $1;',
-			values: [max]
-		};
-		pool.query(query).then((res) => {
-			resolve(res.rows);
-		}).catch((err) => reject(err));
-	});
-}
-
-exports.sessionCreate = (session_id, user_uuid, token) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: QUERIES.session.create,
-			values: [session_id, user_uuid, token]
-		}
-		pool.query(query).then(() => {
-			resolve();
-		}).catch((err) => reject(err));
-	});
-}
-
-exports.sessionGet = (token) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: QUERIES.session.get,
-			values: [token]
-		};
-		pool.query(query).then((res) => {
-			resolve(res.rows);
-		}).catch((err) => reject(err));
-	});
-}
-
-exports.query = (query) => {
-	return new Promise((resolve, reject) => {
-		pool.query(query).then((res) => resolve(res.rows)).catch((err) => reject(err));
+		pool.query(query)
+			.then((result) => resolve(result.rows))
+			.catch((err) => reject(err));
 	});
 }
