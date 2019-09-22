@@ -23,26 +23,27 @@
 				.then((res) => res.json())
 				.then((json) => {
 					$('#newuser-result').html(JSON.stringify(json));
-				})
+				});
 			};
 
-			var query = () => {
+			var runQuery = () => {
 				let query = btoa($('#query').val());
 				let token = $('#token').val();
-				fetch(`/query/${query}/${token}`)
+				fetch(`/query/${query}?token=${token}`)
 				.then((res) => res.json())
 				.then((json) => $('#query-result').html(JSON.stringify(json)));
-			}
+			};
 		</script>
 	</head>
 	<body>
 		<h1>App tests</h1>
+		Token: <input id="token" type="text">
 		<hr>
 
 		<h2>Run any query</h2>
 		<form>
 			<input id="query" type="text"><br>
-			<input type="button" onclick="query()" value="Run query">
+			<input type="button" onclick="runQuery();" value="Run query">
 		</form>
 		<code id="query-result">&nbsp;</code>
 
