@@ -120,7 +120,9 @@ exports.validate = (req) => {
 				if (expiry > now) resolve();
 				else reject(utils.config().response.forbidden);
 			}
-		})//TODO: this needs a catch
+		}).catch((err) => {
+			reject(utils.buildResponse(500, '500', { err: err }));
+		});
 	});
 
 	function _isPublicRoute(path) {
