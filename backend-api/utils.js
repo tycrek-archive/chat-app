@@ -70,7 +70,7 @@ exports.comparePassHash = (password, hash) => {
 // Check if the password meets the requirements
 exports.passwordMeetsRequirements = (password) => {
 	let MIN_LENGTH = 12;
-	let MIN_EACH   = 2;
+	let MIN_EACH   = 1;
 	let LOWER      = new RegExp(/([a-z])/g);
 	let UPPER      = new RegExp(/[A-Z]/g);
 	let NUMBER     = new RegExp(/[0-9]/g);
