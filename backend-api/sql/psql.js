@@ -9,23 +9,14 @@ var QUERIES = {};
 // Initialize connection pool and read queries into RAM
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		_connect()
+		fse.readJson(utils.getPath('sql/auth.json'))
+			.then((obj) => {
+				pool = new Pool({ connectionString: obj.connectionString });
+			})
 			.then(() => _loadQueries())
 			.then(() => resolve())
 			.catch((err) => reject(err));
 	});
-
-	function _connect() {
-		return new Promise((resolve, reject) => {
-			fse.readJson(utils.getPath('sql/auth.json'), (err, obj) => {
-				if (err) reject(err);
-				else {
-					pool = new Pool({ connectionString: obj.connectionString });
-					resolve();
-				}
-			});
-		});
-	}
 
 	function _loadQueries() {
 		return new Promise((resolve, reject) => {
