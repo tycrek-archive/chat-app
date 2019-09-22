@@ -3,7 +3,7 @@ var fse = require('fs-extra');
 const { Pool, Client } = require('pg');
 var format = require('pg-format');
 
-var pool = new Pool();
+var pool = new Pool({});
 var QUERIES = {};
 
 // Initialize connection pool and read queries into RAM
