@@ -62,14 +62,4 @@ router.get('/login/:username/:password', (req, res) => {
 		.then((data) => utils.respond(res, data));
 });
 
-// List current user accounts (testing only!)
-router.get('/list', (req, res) => {
-	Psql.accountList(10).then((dataset) => {
-		res.status(200).send(dataset);
-	}).catch((err) => {
-		res.status(200).send(err);
-	})
-});
-
-
 module.exports = router;

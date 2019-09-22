@@ -49,8 +49,6 @@ exports.userCreate = (name, uuid, hash) => query(QUERIES.user.create, [name, uui
 
 exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'name' : 'uuid']);
 
-exports.accountList = (max = 100) => query('SELECT * FROM users LIMIT $1;', [max]);
-
 exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
