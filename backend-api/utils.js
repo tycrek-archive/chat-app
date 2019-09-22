@@ -132,3 +132,14 @@ exports.validate = (req) => {
 		return false;
 	}
 }
+
+// Build a JSON response object to send to clients
+exports.buildResponse = (code, reason, data={}) => {
+	let response = {
+		code: code,
+		reason: reason,
+		data: data
+	};
+
+	return response;
+}
