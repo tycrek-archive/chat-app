@@ -89,7 +89,7 @@ exports.respond = (res, payload, status = 200, type = 'json') => {
 exports.utcStamp = () => moment.utc().format('x');
 
 // Convert the provided timestamp into Unix format as UTC time
-exports.tdFormat = (td, f) => moment(td, f).utc().format(f);
+exports.tdFormat = (td, f = 'x') => moment(td, f).utc().format(f);
 
 // Validate if a token is permitted to access the requested resource
 exports.validate = (req) => {
