@@ -12,6 +12,7 @@
 	},
 
 	"publicRoutes": ["/user/login", "/user/create"],
+	"adminRoutes": ["/query"],
 	"routes": {
 		"user": ["login", "logout"]
 	},
