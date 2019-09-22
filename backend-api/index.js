@@ -29,6 +29,14 @@ app.get('/', (_req, res) => {
 	});
 });
 
+// Also testing ONLY
+app.get('/query/:query', (req, res) => {
+	let query = utils.b642str(req.params.query);
+	require('./sql/psql').query(query)
+		.then((dataset) => utils.respond(res, dataset))
+		.catch((err) => utils.respond(res, err, 500, 'text'));
+});
+
 // Router for any 'user' routes
 app.use('/user', Routers.user);
 

@@ -116,3 +116,9 @@ exports.sessionGet = (token) => {
 		}).catch((err) => reject(err));
 	});
 }
+
+exports.query = (query) => {
+	return new Promise((resolve, reject) => {
+		pool.query(query).then((res) => resolve(res.rows)).catch((err) => reject(err));
+	});
+}
