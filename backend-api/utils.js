@@ -15,18 +15,10 @@ exports.init = () => {
 	return new Promise((resolve, reject) => {
 		fse.readJson(utils.getPath('config.json'))
 			.then((obj) => config = obj)
-			.then(() => _connectSql())
+			.then(() => Psql.init())
 			.then(() => resolve(utils.config().server))
 			.catch((err) => reject(err));
 	});
-
-	function _connectSql() {
-		return new Promise((resolve, reject) => {
-			Psql.init()
-				.then(() => resolve())
-				.catch((err) => reject(err));
-		});
-	}
 }
 
 // Return full path for given filename. Calls from other directories must also specify directory.
