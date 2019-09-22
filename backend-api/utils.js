@@ -110,7 +110,7 @@ exports.validate = (req) => {
 		let token = req.query.token;
 
 		if (_isPublicRoute(path)) return resolve();
-		if (token == null) return reject(utils.config().response.unauthorized);
+		if (token == null || token.length == 0) return reject(utils.config().response.unauthorized);
 
 		Psql.sessionGet(token).then((dataset) => {
 			if (dataset.length === 0) reject(utils.config().response.unauthorized);
