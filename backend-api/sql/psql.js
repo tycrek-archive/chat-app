@@ -68,9 +68,9 @@ exports.userCreate = (name, uuid, hash) => {
 	});
 }
 
-exports.userInfo = (mode, value) => {
+exports.userInfo = (useName, value) => {
 	return new Promise((resolve, reject) => {
-		let column = mode !== 'NAME' ? 'uuid' : 'name';
+		let column = useName ? 'name' : 'uuid';
 		let query = {
 			text: format(QUERIES.user.info, column),
 			values: [value]
