@@ -2,6 +2,7 @@ var router = require('express').Router();
 var Psql = require('../sql/psql');
 var utils = require('../utils');
 
+// Create a new user
 router.get('/create/:name/:pass', (req, res) => {
 	let name = req.params.name;
 	let pass = utils.b642str(req.params.pass);
@@ -33,6 +34,7 @@ router.get('/create/:name/:pass', (req, res) => {
 	}
 });
 
+// Validate a username/password and respond with a token
 router.get('/login/:username/:password', (req, res) => {
 	let username = req.params.username;
 	let password = utils.b642str(req.params.password);
@@ -73,6 +75,7 @@ router.get('/login/:username/:password', (req, res) => {
 	});
 });
 
+// List current user accounts (testing only!)
 router.get('/list', (req, res) => {
 	Psql.accountList(10).then((dataset) => {
 		res.status(200).send(dataset);
