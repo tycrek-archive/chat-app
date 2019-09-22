@@ -1,7 +1,9 @@
 {
 	"server": {
 		"port": 34682,
-		"https": false
+		"https": false,
+		"privateKey": "",
+		"fullchain": ""
 	},
 
 	"saltRounds": 10,
