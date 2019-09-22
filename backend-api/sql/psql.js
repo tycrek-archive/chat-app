@@ -39,8 +39,7 @@ exports.init = () => {
 						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
 	
 						QUERIES[category][command] = data.toString();
-						count++;
-						if (count === total) resolve();
+						(count++, count === total) && resolve();
 					})
 					.catch((err) => reject(err));
 			}
