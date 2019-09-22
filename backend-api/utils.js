@@ -10,7 +10,7 @@ var utils = this;
 var config = {};
 exports.config = () => config;
 
-// Initialize the server (read configs and connect to SQL)
+// Initialize the server
 exports.init = () => {
 	return new Promise((resolve, reject) => {
 		fse.readJson(utils.getPath('config.json'))
