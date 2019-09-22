@@ -40,19 +40,16 @@ router.get('/login/:username/:password', (req, res) => {
 	let password = utils.b642str(req.params.password);
 	//let password = req.params.password;
 
-	const loginError = {
-		status: 400,
-		reason: 'Invalid username/password'
-	};
+	const loginError = utils.config().response.loginFailed;
 
 	// first check if user exists
 	Psql.userInfo('NAME', username).then((dataset) => {
 		if (dataset.length === 0) {
-			utils.respond(res, loginError, 400);
+			utils.respond(res, loginError, loginError.code);
 		} else {
 			// second, check the password
 			utils.comparePassHash(password, dataset[0].hash).then((same) => {
-				if (!same) utils.respond(res, loginError, 400);
+				if (!same) utils.respond(res, loginError, loginError.code);
 				else {
 					// create a new session
 					let session_id = utils.generateUuid();

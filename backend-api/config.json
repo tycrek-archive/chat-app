@@ -30,6 +30,10 @@
 		"forbidden": {
 			"code": 403,
 			"reason": "Forbidden"
+		},
+		"loginFailed": {
+			"code": 400,
+			"reason": "Invalid username or password"
 		}
 	}
 }
