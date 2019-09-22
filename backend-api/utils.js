@@ -28,7 +28,7 @@ exports.getPath = (filename) => require('path').join(__dirname, filename);
 exports.str2b64 = (str) => Buffer.from(str).toString('base64');
 
 // Decode Base64 data into a string
-exports.b642str = (str) => Buffer.from(str, 'base64').toString();
+exports.b642str = (b64) => Buffer.from(b64, 'base64').toString();
 
 // Generate a V4 UUID
 exports.generateUuid = () => uuidv4();
