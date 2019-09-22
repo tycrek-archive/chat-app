@@ -112,10 +112,10 @@ exports.anyQuery = (query) => {
 	});
 }
 
-function query(text, values) {
+function query(text, values, array) {
 	return new Promise((resolve, reject) => {
 		let query = {
-			text: text,
+			text: array ? format.withArray(text, array) : text,
 			values: values
 		};
 		pool.query(query)
