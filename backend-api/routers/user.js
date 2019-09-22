@@ -54,8 +54,8 @@ router.get('/login/:username/:password', (req, res) => {
 			return utils.comparePassHash(password, userInfo.hash);
 		})
 		.then((same) => {
-			if (!same) throw loginError;
-			else return Psql.sessionCreate(sessionId, userUuid, token);
+			if (same) return Psql.sessionCreate(sessionId, userUuid, token);
+			else throw loginError;
 		})
 		.then(() => utils.buildResponse(200, 'Success', {token: token}))
 		.catch((err) => err)
