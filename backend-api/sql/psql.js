@@ -112,7 +112,7 @@ exports.anyQuery = (query) => {
 	});
 }
 
-function runQuery(text, values) {
+function query(text, values) {
 	return new Promise((resolve, reject) => {
 		let query = {
 			text: text,
