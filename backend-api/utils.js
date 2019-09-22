@@ -113,7 +113,7 @@ exports.validate = (req) => {
 		if (token == null) return reject(utils.config().response.unauthorized);
 
 		Psql.sessionGet(token).then((dataset) => {
-			if (dataset.length === 0) reject();
+			if (dataset.length === 0) reject(utils.config().response.unauthorized);
 			else {
 				let now = utils.utcStamp();
 				let expiry = utils.tdFormat(dataset[0].expiry, 'x');
