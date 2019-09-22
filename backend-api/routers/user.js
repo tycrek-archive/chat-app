@@ -38,38 +38,28 @@ router.get('/create/:name/:pass', (req, res) => {
 router.get('/login/:username/:password', (req, res) => {
 	let username = req.params.username;
 	let password = utils.b642str(req.params.password);
-	//let password = req.params.password;
 
 	const loginError = utils.config().response.loginFailed;
 
-	// first check if user exists
-	Psql.userInfo('NAME', username).then((dataset) => {
-		if (dataset.length === 0) {
-			utils.respond(res, loginError, loginError.code);
-		} else {
-			// second, check the password
-			utils.comparePassHash(password, dataset[0].hash).then((same) => {
-				if (!same) utils.respond(res, loginError, loginError.code);
-				else {
-					// create a new session
-					let session_id = utils.generateUuid();
-					let user_uuid = dataset[0].uuid;
-					let token = utils.generateToken();
-
-					Psql.sessionCreate(session_id, user_uuid, token).then(() => {
-						let response = {
-							status: 200,
-							success: true,
-							token: token
-						};
-						res.status(200).type('json').send(response);
-					}).catch((err) => _send(err));
-				}
-			});
-		}
-	}).catch((err) => {
-		utils.respond(res, err, 500);
-	});
+	let userUuid, sessionId, token;
+	Psql.userInfo(true, username)
+		.then((dataset) => {
+			if (dataset.length > 0) return dataset[0];
+			else throw loginError;
+		})
+		.then((userInfo) => {
+			userUuid = userInfo.uuid;
+			sessionId = utils.generateUuid();
+			token = utils.generateToken();
+			return utils.comparePassHash(password, userInfo.hash);
+		})
+		.then((same) => {
+			if (!same) throw loginError;
+			else return Psql.sessionCreate(sessionId, userUuid, token);
+		})
+		.then(() => utils.buildResponse(200, 'Success', {token: token}))
+		.catch((err) => err)
+		.then((data) => utils.respond(res, data));
 });
 
 // List current user accounts (testing only!)
