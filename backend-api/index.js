@@ -32,18 +32,16 @@ app.get('/', (_req, res) => {
 // Router for any 'user' routes
 app.use('/user', Routers.user);
 
-//TODO: Improve app.listen
-//TODO: HTTPS either with https module or Apache proxy on server
+// Initialize and host the server
 utils.init()
 	.then((server) => {
-		if (!server.https) {
-			app.listen(server.port, () => console.log(`Server hosted on: ${server.port}`));
-		} else {
-			let https = require('https');
-			https.createServer({
+		if (server.https) {
+			require('https').createServer({
 				key: '', // For key and cert, these values can be specific in config.json but must be passed as a data string
 				cert: '',
 			}, app).listen(server.port, () => console.log(`Server (HTTPS) hosted on: ${server.port}`))
+		} else {
+			app.listen(server.port, () => console.log(`Server hosted on: ${server.port}`));
 		}
 	})
 	.catch((err) => console.error(err));
