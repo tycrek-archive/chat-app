@@ -4,7 +4,6 @@ var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 var moment = require('moment');
 
-
 var Psql = require('./sql/psql');
 var utils = this;
 
