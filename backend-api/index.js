@@ -35,7 +35,17 @@ app.use('/user', Routers.user);
 //TODO: Improve app.listen
 //TODO: HTTPS either with https module or Apache proxy on server
 utils.init()
-	.then((port) => app.listen(port, () => console.log(`Server hosted on: ${port}`)))
+	.then((server) => {
+		if (!server.https) {
+			app.listen(server.port, () => console.log(`Server hosted on: ${server.port}`));
+		} else {
+			let https = require('https');
+			https.createServer({
+				key: '', // For key and cert, these values can be specific in config.json but must be passed as a data string
+				cert: '',
+			}, app).listen(server.port, () => console.log(`Server (HTTPS) hosted on: ${server.port}`))
+		}
+	})
 	.catch((err) => console.error(err));
 
 module.exports = app;
