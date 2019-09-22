@@ -45,17 +45,7 @@ exports.init = () => {
 	}
 }
 
-exports.userCreate = (name, uuid, hash) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: QUERIES.user.create,
-			values: [name, uuid, hash]
-		};
-		pool.query(query).then(() => {
-			resolve();
-		}).catch((err) => reject(err));
-	});
-}
+exports.userCreate = (name, uuid, hash) => query(QUERIES.user.create, [name, uuid, hash]);
 
 exports.userInfo = (useName, value) => {
 	return new Promise((resolve, reject) => {
@@ -70,47 +60,13 @@ exports.userInfo = (useName, value) => {
 	});
 }
 
-exports.accountList = (max = 100) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: 'SELECT * FROM users LIMIT $1;',
-			values: [max]
-		};
-		pool.query(query).then((res) => {
-			resolve(res.rows);
-		}).catch((err) => reject(err));
-	});
-}
+exports.accountList = (max = 100) => query('SELECT * FROM users LIMIT $1;', [max]);
 
-exports.sessionCreate = (session_id, user_uuid, token) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: QUERIES.session.create,
-			values: [session_id, user_uuid, token]
-		}
-		pool.query(query).then(() => {
-			resolve();
-		}).catch((err) => reject(err));
-	});
-}
+exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 
-exports.sessionGet = (token) => {
-	return new Promise((resolve, reject) => {
-		let query = {
-			text: QUERIES.session.get,
-			values: [token]
-		};
-		pool.query(query).then((res) => {
-			resolve(res.rows);
-		}).catch((err) => reject(err));
-	});
-}
+exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
 
-exports.anyQuery = (query) => {
-	return new Promise((resolve, reject) => {
-		pool.query(query).then((res) => resolve(res.rows)).catch((err) => reject(err));
-	});
-}
+exports.anyQuery = (text) => query(text);
 
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {
