@@ -18,14 +18,7 @@ app.use(compression());
 app.use((req, res, next) => {
 	utils.validate(req)
 		.then(() => next())
-		.catch((err) => {
-			let code = err.split('::')[0];
-			let data = {
-				status: code,
-				reason: err.split('::')[1]
-			};
-			utils.respond(res, data, code);
-		});
+		.catch((err) => utils.respond(res, err, code));
 });
 
 // For testing ONLY
