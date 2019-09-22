@@ -31,7 +31,7 @@
 				let token = $('#token').val();
 				fetch(`/query/${query}?token=${token}`)
 				.then((res) => res.json())
-				.then((json) => $('#query-result').html(JSON.stringify(json)));
+				.then((json) => $('#query-result').html(JSON.stringify(json, null, 4)));
 			};
 		</script>
 	</head>
@@ -45,7 +45,7 @@
 			<input id="query" type="text"><br>
 			<input type="button" onclick="runQuery();" value="Run query">
 		</form>
-		<code id="query-result">&nbsp;</code>
+		<pre id="query-result">&nbsp;</pre>
 
 		<hr>
 
@@ -55,7 +55,7 @@
 			Password: <input id="newuser-password" type="text"><br>
 			<input type="button" onclick="newUser()" value="Create user">
 		</form>
-		<code id="newuser-result">&nbsp;</code>
+		<pre id="newuser-result">&nbsp;</pre>
 
 		<hr>
 
@@ -65,6 +65,6 @@
 			Password: <input id="login-password" type="text"><br>
 			<input type="button" onclick="login()" value="Login">
 		</form>
-		<code id="login-result">&nbsp;</code>
+		<pre id="login-result">&nbsp;</pre>
 	</body>
 </html>
