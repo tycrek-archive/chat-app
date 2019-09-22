@@ -106,7 +106,7 @@ exports.sessionGet = (token) => {
 	});
 }
 
-exports.query = (query) => {
+exports.anyQuery = (query) => {
 	return new Promise((resolve, reject) => {
 		pool.query(query).then((res) => resolve(res.rows)).catch((err) => reject(err));
 	});
