@@ -6,7 +6,10 @@
 		"fullchain": ""
 	},
 
-	"saltRounds": 10,
+	"security": {
+		"saltRounds": 10,
+		"tokenLength": 32
+	},
 
 	"publicRoutes": ["/user/login", "/user/create"],
 	"routes": {
