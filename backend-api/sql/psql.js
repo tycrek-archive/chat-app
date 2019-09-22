@@ -35,10 +35,10 @@ exports.init = () => {
 				let fullPath = `sql/queries/${category}.${command}.sql`;
 
 				fse.readFile(utils.getPath(fullPath))
-					.then((data) => {
+					.then((bytes) => {
 						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
 	
-						QUERIES[category][command] = data.toString();
+						QUERIES[category][command] = bytes.toString();
 						(count++, count === total) && resolve();
 					})
 					.catch((err) => reject(err));
