@@ -1,5 +1,9 @@
 {
-	"port": 34682,
+	"server": {
+		"port": 34682,
+		"https": false
+	},
+
 	"saltRounds": 10,
 
 	"publicRoutes": ["/user/login", "/user/create"],

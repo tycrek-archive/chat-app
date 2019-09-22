@@ -16,7 +16,7 @@ exports.init = () => {
 	return new Promise((resolve, reject) => {
 		_readConfig()
 			.then(() => _connectSql())
-			.then(() => resolve(utils.config().port))
+			.then(() => resolve(utils.config().server.port))
 			.catch((err) => reject(err));
 	});
 
