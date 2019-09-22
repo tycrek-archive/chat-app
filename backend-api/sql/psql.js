@@ -34,14 +34,15 @@ exports.init = () => {
 			function _readQuery(category, command, resolve, reject) {
 				let fullPath = `sql/queries/${category}.${command}.sql`;
 
-				fse.readFile(utils.getPath(fullPath), (err, data) => {
-					if (err) return reject(err);
-					if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
-
-					QUERIES[category][command] = data.toString();
-					count++;
-					if (count === total) resolve();
-				});
+				fse.readFile(utils.getPath(fullPath))
+					.then((data) => {
+						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
+	
+						QUERIES[category][command] = data.toString();
+						count++;
+						if (count === total) resolve();
+					})
+					.catch((err) => reject(err));
 			}
 		});
 	}
