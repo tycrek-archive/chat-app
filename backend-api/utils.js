@@ -91,6 +91,7 @@ exports.passwordMeetsRequirements = (password) => {
 // Send an Express response
 // (with multiple routers, having this done here makes more sense)
 exports.respond = (res, payload, status = 200, type = 'json') => {
+	if (payload.code) status = payload.code;
 	res.status(status);
 	res.type(type);
 	res.send(payload);
