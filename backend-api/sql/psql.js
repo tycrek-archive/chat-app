@@ -111,3 +111,15 @@ exports.query = (query) => {
 		pool.query(query).then((res) => resolve(res.rows)).catch((err) => reject(err));
 	});
 }
+
+function runQuery(text, values) {
+	return new Promise((resolve, reject) => {
+		let query = {
+			text: text,
+			values: values
+		};
+		pool.query(query)
+			.then((result) => resolve(result.rows))
+			.catch((err) => reject(err));
+	});
+}
