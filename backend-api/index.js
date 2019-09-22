@@ -18,7 +18,7 @@ app.use(compression());
 app.use((req, res, next) => {
 	utils.validate(req)
 		.then(() => next())
-		.catch((err) => utils.respond(res, err, code));
+		.catch((err) => utils.respond(res, err));
 });
 
 // For testing ONLY
