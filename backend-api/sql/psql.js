@@ -47,18 +47,7 @@ exports.init = () => {
 
 exports.userCreate = (name, uuid, hash) => query(QUERIES.user.create, [name, uuid, hash]);
 
-exports.userInfo = (useName, value) => {
-	return new Promise((resolve, reject) => {
-		let column = useName ? 'name' : 'uuid';
-		let query = {
-			text: format(QUERIES.user.info, column),
-			values: [value]
-		};
-		pool.query(query).then((res) => {
-			resolve(res.rows);
-		}).catch((err) => reject(err));
-	});
-}
+exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'name' : 'uuid']);
 
 exports.accountList = (max = 100) => query('SELECT * FROM users LIMIT $1;', [max]);
 
