@@ -10,9 +10,7 @@ var QUERIES = {};
 exports.init = () => {
 	return new Promise((resolve, reject) => {
 		fse.readJson(utils.getPath('sql/auth.json'))
-			.then((obj) => {
-				pool = new Pool({ connectionString: obj.connectionString });
-			})
+			.then((obj) => pool = new Pool(obj))
 			.then(() => _loadQueries())
 			.then(() => resolve())
 			.catch((err) => reject(err));
