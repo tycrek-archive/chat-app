@@ -13,15 +13,12 @@ exports.config = () => config;
 // Initialize the server (read configs and connect to SQL)
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		_readConfig()
+		fse.readJson(utils.getPath('config.json'))
+			.then((obj) => config = obj)
 			.then(() => _connectSql())
 			.then(() => resolve(utils.config().server))
 			.catch((err) => reject(err));
 	});
-
-	function _readConfig() {
-		return new Promise((resolve, reject) => fse.readJson(utils.getPath('config.json'), (err, data) => err ? reject(err) : (config = data, resolve())));
-	}
 
 	function _connectSql() {
 		return new Promise((resolve, reject) => {
