@@ -110,7 +110,7 @@ exports.validate = (req) => {
 		let token = req.query.token;
 
 		if (_isPublicRoute(path)) return resolve();
-		if (token == null) return reject('401::Unauthorized');
+		if (token == null) return reject(utils.config().response.unauthorized);
 
 		Psql.sessionGet(token).then((dataset) => {
 			if (dataset.length === 0) reject();
@@ -118,7 +118,7 @@ exports.validate = (req) => {
 				let now = utils.utcStamp();
 				let expiry = utils.tdFormat(dataset[0].expiry, 'x');
 				if (expiry > now) resolve();
-				else reject('403::Forbidden');
+				else reject(utils.config().response.forbidden);
 			}
 		})//TODO: this needs a catch
 	});
