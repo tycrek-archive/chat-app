@@ -21,7 +21,7 @@ router.get('/create/:name/:pass', (req, res) => {
 			.then((hash) => Psql.userCreate(name, uuid, hash))
 			.then(() => crypto.generateKeyPair(pass))
 			.then(([pubKey, privKey]) => Psql.keypairsCreate(uuid, pubKey, privKey))
-			.then(() => utils.respond( utils.config().response.success))
+			.then(() => utils.respond(utils.config().response.success))
 			.catch((err) => {
 				if (err == errorResponse) utils.respond(res, errorResponse);
 				else utils.respond(res, utils.buildResponse(errorResponse, { err: err.toString() }));
