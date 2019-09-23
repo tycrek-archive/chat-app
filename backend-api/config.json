@@ -25,13 +25,18 @@
 		"user.create",
 		"user.info",
 
-		"keypairs.create"
+		"keypairs.create",
+		"keypairs.get"
 	],
 
 	"response": {
 		"success": {
 			"code": 200,
 			"reason": "Success"
+		},
+		"error": {
+			"code": 500,
+			"reason": "computer go boom"
 		},
 		"unauthorized": {
 			"code": 401,
