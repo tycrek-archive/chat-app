@@ -123,7 +123,7 @@ exports.validate = (req) => {
 			})
 			.then(() => resolve())
 			.catch((err) => {
-				err = err.code == null ? Utils.buildResponse(500, '500', { err: err }) : err;
+				err = err.code == null ? Utils.buildNewResponse(500, '500', { err: err }) : err;
 				reject(err);
 			});
 	});
@@ -139,7 +139,7 @@ exports.validate = (req) => {
 }
 
 // Build a JSON response object to send to clients
-exports.buildResponse = (code, reason, data={}) => {
+exports.buildNewResponse = (code, reason, data={}) => {
 	let response = {
 		code: code,
 		reason: reason,

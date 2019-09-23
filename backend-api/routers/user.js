@@ -51,7 +51,7 @@ router.get('/login/:username/:password', (req, res) => {
 			if (same) return Psql.sessionCreate(sessionId, userUuid, token);
 			else throw loginError;
 		})
-		.then(() => utils.buildResponse(200, 'Success', {token: token}))
+		.then(() => utils.buildNewResponse(200, 'Success', {token: token}))
 		.catch((err) => err)
 		.then((data) => utils.respond(res, data));
 });
