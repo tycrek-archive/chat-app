@@ -148,3 +148,8 @@ exports.buildNewResponse = (code, reason, data={}) => {
 
 	return response;
 }
+
+exports.buildResponse = (response, data) => {
+	response.data = data;
+	return response;
+}
