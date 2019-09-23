@@ -23,7 +23,9 @@
 		"session.get",
 
 		"user.create",
-		"user.info"
+		"user.info",
+
+		"keypairs.create"
 	],
 
 	"response": {
