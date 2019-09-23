@@ -27,6 +27,10 @@
 	],
 
 	"response": {
+		"success": {
+			"code": 200,
+			"reason": "Success"
+		},
 		"unauthorized": {
 			"code": 401,
 			"reason": "Unauthorized"
