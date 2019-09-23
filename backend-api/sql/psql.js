@@ -57,6 +57,8 @@ exports.anyQuery = (text) => query(text);
 
 exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
 
+exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privKey' : 'pubkey']);
+
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {
 		let query = {
