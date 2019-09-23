@@ -17,7 +17,8 @@ router.get('/public/:toUser', (req, res) => {
 			let template = Utils.config().response.success;
 			let response = Utils.buildResponse(template, { pubKey: key });
 			Utils.respond(res, response);
-		});
+		})
+		.catch((err) => Utils.respond(res, err));
 });
 
 module.exports = router;
