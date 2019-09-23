@@ -73,3 +73,22 @@ exports.generateKeyPair = (password) => {
 		});
 	})
 }
+
+// Encrypt data with public key
+//TODO: Move to client-side
+exports.encrypt = (data, publicKey) => {
+	let buffer = Buffer.from(data);
+	let encrypted = crypto.publicEncrypt(publicKey, buffer);
+	return encrypted.toString('base64');
+}
+
+// Decrypt data with private key
+//TODO: Move to client-side
+exports.decrypt = (data, privateKey, password) => {
+	let buffer = Buffer.from(data, 'base64');
+	let decrypted = crypto.privateDecrypt({
+		key: privateKey,
+		passphrase: password
+	}, buffer);
+	return decrypted.toString('utf8');
+}
