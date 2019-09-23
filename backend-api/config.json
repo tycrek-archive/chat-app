@@ -11,7 +11,7 @@
 		"tokenLength": 32
 	},
 
-	"publicRoutes": ["/user/login", "/user/create", "/favicon.ico"],
+	"publicRoutes": ["/user/login", "/user/create", "/favicon.ico", "/bundle.js"],
 	"adminRoutes": ["/query"],
 	"routes": {
 		"user": ["login", "logout"]
