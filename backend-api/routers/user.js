@@ -21,7 +21,7 @@ router.get('/create/:name/:pass', (req, res) => {
 			.then(() => utils.respond( utils.config().response.success))
 			.catch((err) => {
 				if (err == errorResponse) utils.respond(res, errorResponse);
-				else utils.respond(res, (errorResponse.data = { err: err.toString() }, errorResponse));
+				else utils.respond(res, utils.buildResponse(errorResponse, { err: err.toString() }));
 			});
 	} else {
 		utils.respond(res, errorResponse);
