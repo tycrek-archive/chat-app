@@ -8,29 +8,23 @@ router.get('/create/:name/:pass', (req, res) => {
 	let pass = utils.b642str(req.params.pass);
 	let uuid = utils.generateUuid();
 
-	let response = {
-		status: 200,
-		success: true,
-		error: null
-	};
+	let errorResponse = utils.config().response.loginFailed;
 
-	_createAccount(name, pass, uuid)
-		.then(() => utils.respond(res, response))
-		.catch((err) => {
-			response.status = 400;
-			response.success = false;
-			response.error = err;
-			utils.respond(res, response, 400);
-		});
-
-	function _createAccount(name, pass, uuid) {
-		return new Promise((resolve, reject) => {
-			if (!utils.passwordMeetsRequirements(pass)) reject('Bad password');
-			else utils.generateHash(pass)
-				.then((hash) => Psql.userCreate(name, uuid, hash))
-				.then(() => resolve())
-				.catch((err) => reject(err));
-		});
+	if (utils.passwordMeetsRequirements(pass)) {
+		Psql.userInfo(true, name)
+			.then((dataset) => {
+				if (dataset.length < 1) return;
+				else throw errorResponse;
+			})
+			.then(() => utils.generateHash(pass))
+			.then((hash) => Psql.userCreate(name, uuid, hash))
+			.then(() => utils.respond( utils.config().response.success))
+			.catch((err) => {
+				if (err == errorResponse) utils.respond(res, errorResponse);
+				else utils.respond(res, (errorResponse.data = { err: err.toString() }, errorResponse));
+			});
+	} else {
+		utils.respond(res, errorResponse);
 	}
 });
 
