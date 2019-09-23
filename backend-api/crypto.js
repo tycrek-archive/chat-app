@@ -51,3 +51,25 @@ exports.passwordMeetsRequirements = (password) => {
 	) return true;
 	else return false;
 }
+
+// Generate public/private keypairs
+exports.generateKeyPair = (password) => {
+	return new Promise((resolve, reject) => {
+		crypto.generateKeyPair('rsa', {
+			modulusLength: 4096,
+			publicKeyEncoding: {
+				type: 'skpi',
+				format: 'pem'
+			},
+			privateKeyEncoding: {
+				type: 'pkcs8',
+				format: 'pem',
+				cipher: 'aes-256-cbc',
+				passphrase: password
+			}
+		}, (err, publicKey, privateKey) => {
+				if (err) reject(err);
+				else resolve([publicKey, privateKey]);
+		});
+	})
+}
