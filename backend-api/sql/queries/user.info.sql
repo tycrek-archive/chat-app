@@ -1,1 +1,1 @@
-SELECT * FROM users WHERE %I LIKE $1::text;
+SELECT * FROM users WHERE %I = $1;
