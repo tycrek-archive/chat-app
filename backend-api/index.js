@@ -5,7 +5,8 @@ var compression = require('compression');
 // Local imports
 var utils = require('./utils');
 var Routers = {
-	user: require('./routers/user')
+	user: require('./routers/user'),
+	keypairs: require('./routers/keypairs')
 };
 
 // Express setup
@@ -39,6 +40,7 @@ app.get('/query/:query', (req, res) => {
 
 // Router for any 'user' routes
 app.use('/user', Routers.user);
+app.use('/keypairs', Routers.keypairs);
 
 // Initialize and host the server
 utils.init()
