@@ -36,10 +36,7 @@ router.get('/private', (req, res) => {
 			let response = Utils.buildResponse(template, { privKey: key });
 			Utils.respond(res, response);
 		})
-		.catch((err) => {
-			console.log(err);
-			Utils.respond(res, err);
-		});
+		.catch((err) => Utils.respond(res, err));
 });
 
 module.exports = router;
