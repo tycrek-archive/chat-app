@@ -6,7 +6,9 @@ var compression = require('compression');
 var utils = require('./utils');
 var Routers = {
 	user: require('./routers/user'),
-	keypairs: require('./routers/keypairs')
+	keypairs: require('./routers/keypairs'),
+	chats: require('./routers/chats'),
+	messages: require('./routers/messages')
 };
 
 // Express setup
