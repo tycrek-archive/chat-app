@@ -59,6 +59,14 @@ exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.creat
 
 exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privkey' : 'pubkey']);
 
+exports.chatsCreate = (chatId, senderId, recipientId) => query(QUERIES.chats.create, [chatId, senderId, recipientId]);
+
+exports.chatsGet = (userId) => query(QUERIES.chats.get, [userId]);
+
+exports.messagesCreate = (messageId, chatId, data, timestamp, senderId, recipientId) => query(QUERIES.messages.create, [messageId, chatId, data, timestamp, senderId, recipientId]);
+
+exports.messagesGet = (chatId) = query(QUERIES.messages.get, [chatId]);
+
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {
 		let query = {
