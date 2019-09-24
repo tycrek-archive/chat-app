@@ -29,9 +29,11 @@
 		"keypairs.get",
 
 		"chats.create",
+		"chats.list",
 		"chats.get",
 
 		"messages.create",
+		"messages.list",
 		"messages.get"
 	],
 

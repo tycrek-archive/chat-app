@@ -1,1 +1,1 @@
-SELECT * FROM chats WHERE sender_id = $1;
+SELECT * FROM chats WHERE chat_id = $1;

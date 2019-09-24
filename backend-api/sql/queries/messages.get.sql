@@ -1,1 +1,1 @@
-SELECT * FROM messages WHERE chat_id = $1 ORDER BY "time";
+SELECT * FROM messages WHERE message_id = $1;

@@ -1,0 +1,1 @@
+SELECT * FROM chats WHERE sender_id = $1;
