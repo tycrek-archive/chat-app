@@ -26,4 +26,21 @@ router.get('/create/:chatId/:data', (req, res) => {
 		});
 });
 
+router.get('/list/:chatId', (req, res) => {
+	let token = req.query.token;
+	let chatId = req.params.chatId
+
+	Psql.messagesList(chatId)
+		.then((dataset) => {
+			let template = Utils.config().response.success;
+			let response = Utils.buildResponse(template, { messages: dataset });
+			Utils.respond(res, response);
+		})
+		.catch((err) => {
+			let template = Utils.config().response.error;
+			let response = Utils.buildResponse(template, { err: err });
+			Utils.send(res, response);
+		});
+});
+
 module.exports = router;
