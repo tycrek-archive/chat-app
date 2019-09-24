@@ -61,11 +61,15 @@ exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], 
 
 exports.chatsCreate = (chatId, senderId, recipientId) => query(QUERIES.chats.create, [chatId, senderId, recipientId]);
 
-exports.chatsGet = (userId) => query(QUERIES.chats.get, [userId]);
+exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
+
+exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
 
 exports.messagesCreate = (messageId, chatId, data, timestamp, senderId, recipientId) => query(QUERIES.messages.create, [messageId, chatId, data, timestamp, senderId, recipientId]);
 
-exports.messagesGet = (chatId) = query(QUERIES.messages.get, [chatId]);
+exports.messagesList = (chatId) => query(QUERIES.messages.list, [chatId]);
+
+exports.messagesGet = (messageId) => query(QUERIES.messages.get, [messageId]);
 
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {
