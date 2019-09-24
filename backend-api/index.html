@@ -47,7 +47,24 @@
 					else return json.data.pubKey;
 				})
 				.then((pubKey) => encrypt(message, pubKey))
-				.then((encrypted) => console.log(encrypted));
+				.then((encrypted) => $('#send-result').html(encrypted))
+				.catch((err) => alert(err));
+			};
+
+			var decryptMsg = function() {
+				let token = $('#token').val();
+				let encrypted = $('#decrypt-text').val();
+				let password = $('#decrypt-pass').val();
+
+				fetch(`/keypairs/private?token=${token}`)
+				.then((res) => res.json())
+				.then((json) => {
+					if (json.code != 200) throw 'Error';
+					else return json.data.privKey;
+				})
+				.then((privKey) => decrypt(encrypted, privKey, password))
+				.then((decrypted) => $('#decrypt-result').html(decrypted))
+				.catch((err) => (console.error(err), alert(err)));
 			};
 		</script>
 	</head>
@@ -92,5 +109,15 @@
 			<input type="button" onclick="sendMsg()" value="Send">
 		</form>
 		<pre id="send-result">&nbsp;</pre>
+
+		<hr>
+
+		<h2>Decrypt message</h2>
+		<form>
+			Encrypted: <input id="decrypt-text" type="text"><br>
+			Password: <input id="decrypt-pass" type="text"><br>
+			<input type="button" onclick="decryptMsg()" value="Decrypt">
+		</form>
+		<pre id="decrypt-result">&nbsp;</pre>
 	</body>
 </html>
