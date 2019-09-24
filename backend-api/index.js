@@ -19,6 +19,8 @@ app.use(compression());
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	utils.validate(req)
 		.then(() => next())
 		.catch((err) => utils.respond(res, err));
