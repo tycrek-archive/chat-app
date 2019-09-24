@@ -63,8 +63,8 @@
 					else return json.data.privKey;
 				})
 				.then((privKey) => decrypt(encrypted, privKey, password))
-				.then((decrypted) => $('#decrypt-result').html(decrypted))
-				.catch((err) => (console.error(err), alert(err)));
+				.then((decrypted) => $('#decrypt-result').html(atob(decrypted)))
+				.catch((err) => alert(err));
 			};
 		</script>
 	</head>
