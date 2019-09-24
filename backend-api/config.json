@@ -26,7 +26,13 @@
 		"user.info",
 
 		"keypairs.create",
-		"keypairs.get"
+		"keypairs.get",
+
+		"chats.create",
+		"chats.get",
+
+		"messages.create",
+		"messages.get"
 	],
 
 	"response": {

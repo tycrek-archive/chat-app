@@ -1,0 +1,1 @@
+INSERT INTO messages(message_id, chat_id, read, data, time) VALUES($1, $2, false, $3, $4);

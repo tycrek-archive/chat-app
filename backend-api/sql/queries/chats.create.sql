@@ -1,0 +1,1 @@
+INSERT INTO chats(chat_id, sender_id, recipient_id) VALUES($1, $2, $3);
