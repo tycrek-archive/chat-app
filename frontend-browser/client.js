@@ -43,6 +43,7 @@ window.signUp = function () {
 	fetch(`http://${SERVER}:34682/user/create/${username}/${password}`)
 		.then((res) => res.json())
 		.then((json) => {
+			$('#loading').hide();
 			if (json.code != 200) this.alert(json.reason);
 			else pageLogin();
 		})
