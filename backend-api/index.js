@@ -5,7 +5,8 @@ var compression = require('compression');
 // Local imports
 var utils = require('./utils');
 var Routers = {
-	user: require('./routers/user')
+	user: require('./routers/user'),
+	keypairs: require('./routers/keypairs')
 };
 
 // Express setup
@@ -37,8 +38,16 @@ app.get('/query/:query', (req, res) => {
 		.catch((err) => utils.respond(res, err, 500, 'text'));
 });
 
+app.get('/bundle.js', (_req, res) => {
+	require('fs-extra').readFile(utils.getPath('bundle.js'))
+		.then((bytes) => bytes.toString())
+		.then((data) => utils.respond(res, data, 200, 'js'))
+		.catch((err) => utils.respond(res, utils.config().response.error));
+});
+
 // Router for any 'user' routes
 app.use('/user', Routers.user);
+app.use('/keypairs', Routers.keypairs);
 
 // Initialize and host the server
 utils.init()

@@ -1,24 +1,27 @@
 var router = require('express').Router();
 var Psql = require('../sql/psql');
 var utils = require('../utils');
+var crypto = require('../crypto');
 
 // Create a new user
 router.get('/create/:name/:pass', (req, res) => {
 	let name = req.params.name;
 	let pass = utils.b642str(req.params.pass);
-	let uuid = utils.generateUuid();
+	let uuid = crypto.generateUuid();
 
 	let errorResponse = utils.config().response.loginFailed;
 
-	if (utils.passwordMeetsRequirements(pass)) {
+	if (crypto.passwordMeetsRequirements(pass)) {
 		Psql.userInfo(true, name)
 			.then((dataset) => {
 				if (dataset.length < 1) return;
 				else throw errorResponse;
 			})
-			.then(() => utils.generateHash(pass))
+			.then(() => crypto.generateHash(pass))
 			.then((hash) => Psql.userCreate(name, uuid, hash))
-			.then(() => utils.respond( utils.config().response.success))
+			.then(() => crypto.generateKeyPair(pass))
+			.then(([pubKey, privKey]) => Psql.keypairsCreate(uuid, pubKey, privKey))
+			.then(() => utils.respond(res, utils.config().response.success))
 			.catch((err) => {
 				if (err == errorResponse) utils.respond(res, errorResponse);
 				else utils.respond(res, utils.buildResponse(errorResponse, { err: err.toString() }));
@@ -43,9 +46,9 @@ router.get('/login/:username/:password', (req, res) => {
 		})
 		.then((userInfo) => {
 			userUuid = userInfo.uuid;
-			sessionId = utils.generateUuid();
-			token = utils.generateToken();
-			return utils.comparePassHash(password, userInfo.hash);
+			sessionId = crypto.generateUuid();
+			token = crypto.generateToken();
+			return crypto.comparePassHash(password, userInfo.hash);
 		})
 		.then((same) => {
 			if (same) return Psql.sessionCreate(sessionId, userUuid, token);

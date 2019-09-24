@@ -11,7 +11,7 @@
 		"tokenLength": 32
 	},
 
-	"publicRoutes": ["/user/login", "/user/create", "/favicon.ico"],
+	"publicRoutes": ["/user/login", "/user/create", "/favicon.ico", "/bundle.js"],
 	"adminRoutes": ["/query"],
 	"routes": {
 		"user": ["login", "logout"]
@@ -23,13 +23,20 @@
 		"session.get",
 
 		"user.create",
-		"user.info"
+		"user.info",
+
+		"keypairs.create",
+		"keypairs.get"
 	],
 
 	"response": {
 		"success": {
 			"code": 200,
 			"reason": "Success"
+		},
+		"error": {
+			"code": 500,
+			"reason": "computer go boom"
 		},
 		"unauthorized": {
 			"code": 401,

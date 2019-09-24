@@ -35,7 +35,7 @@ exports.init = () => {
 				fse.readFile(utils.getPath(fullPath))
 					.then((bytes) => {
 						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
-	
+
 						QUERIES[category][command] = bytes.toString();
 						(count++, count === total) && resolve();
 					})
@@ -54,6 +54,10 @@ exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.cr
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
 
 exports.anyQuery = (text) => query(text);
+
+exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
+
+exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privkey' : 'pubkey']);
 
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {
