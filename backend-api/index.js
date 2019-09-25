@@ -52,6 +52,8 @@ app.get('/bundle.js', (_req, res) => {
 // Router for any 'user' routes
 app.use('/user', Routers.user);
 app.use('/keypairs', Routers.keypairs);
+app.use('/chats', Routers.chats);
+app.use('/messages', Routers.messages);
 
 // Initialize and host the server
 utils.init()
