@@ -18,3 +18,22 @@ window.decrypt = function (data, privateKey, password) {
 	}, buffer);
 	return decrypted.toString('utf8');
 };
+
+window.validatePassword = (password) => {
+	let MIN_LENGTH = 12;
+	let MIN_EACH = 1;
+	let LOWER = new RegExp(/[a-z]/g);
+	let UPPER = new RegExp(/[A-Z]/g);
+	let NUMBER = new RegExp(/[0-9]/g);
+	let SYMBOL = new RegExp(/[ `~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
+	//TODO: Any characters not included in the above should be denied (maybe?)
+
+	if (
+		password.length >= MIN_LENGTH &&
+		password.match(LOWER).length >= MIN_EACH &&
+		password.match(UPPER).length >= MIN_EACH &&
+		password.match(NUMBER).length >= MIN_EACH &&
+		password.match(SYMBOL).length >= MIN_EACH
+	) return true;
+	else return false;
+}

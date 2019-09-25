@@ -35,11 +35,10 @@ exports.generateToken = (length = Utils.config().security.tokenLength) => crypto
 exports.passwordMeetsRequirements = (password) => {
 	let MIN_LENGTH = 12;
 	let MIN_EACH = 1;
-	let LOWER = new RegExp(/([a-z])/g);
+	let LOWER = new RegExp(/[a-z]/g);
 	let UPPER = new RegExp(/[A-Z]/g);
 	let NUMBER = new RegExp(/[0-9]/g);
-	let SYMBOL = new RegExp(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g);
-	//TODO: Fix regex (do I need to have () or not?)
+	let SYMBOL = new RegExp(/[ `~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
 	//TODO: Any characters not included in the above should be denied (maybe?)
 
 	if (
