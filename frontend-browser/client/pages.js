@@ -5,25 +5,17 @@ window.fetchPage = function (route) {
 };
 
 window.pageNewUser = function () {
-	this.fetch('/html/newUser.html')
-		.then((res) => res.text())
-		.then((text) => $('#content').html(text));
+	fetchPage('/html/newUser.html');
 };
 
 window.pageLogin = function () {
-	this.fetch('/html/login.html')
-		.then((res) => res.text())
-		.then((body) => $('#content').html(body));
+	fetchPage('/html/login.html');
 };
 
 window.pageChats = function () {
-	this.fetch('/html/chats.html')
-		.then((res) => res.text())
-		.then((body) => $('#content').html(body));
+	fetchPage('/html/chats.html');
 };
 
 window.pageMessages = function () {
-	this.fetch('/html/messages.html')
-		.then((res) => res.text())
-		.then((text) => $('#content').html(text));
+	fetchPage('/html/messages.html');
 };
