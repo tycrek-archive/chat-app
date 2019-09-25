@@ -7,6 +7,6 @@
 	},
 
 	"client": {
-		"files": ["client.js"]
+		"files": ["client.js", "pages.js"]
 	}
 }
