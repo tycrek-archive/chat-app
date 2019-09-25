@@ -1,18 +1,17 @@
 <div id="messages">
-	<h2>Chats</h2>
-	<h3>New chat</h3>
+	<h2>Messages</h2>
+	<h3>Load messages</h3>
 
-	To: <input id="recipient" type="text"><br>
-	Message: <input id="message" type="text"><br>
-	<button onclick="createChat()">Send</button><br>
+	Chat ID: <input id="chatId" type="text"><br>
+	<button onclick="listMessages()">Load</button><br>
 
 	<br>
-	<h3>Conversations</h3>
-	<h4 id="loading">Loading...</h4>
+	<h3>Messages</h3>
+	<h4 id="loading" hidden>Loading...</h4>
 	<pre id="messages-list">
 		&nbsp;
 	</pre>
 </div>
 <script type="text/javascript">
-	listChats();
+	//listMessages();
 </script>
