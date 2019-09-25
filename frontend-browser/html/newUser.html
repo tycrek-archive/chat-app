@@ -33,4 +33,14 @@
 			$('#status').hide();
 		}
 	});
+
+	// Verify username
+	$('#username').on('input', () => {
+		let username = $('#username').val();
+		if (!validateUsername(username)) {
+			$('#status').html('<pre>Invalid username!</pre>').show();
+		} else {
+			$('#status').hide();
+		}
+	});
 </script>
