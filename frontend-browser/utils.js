@@ -31,7 +31,8 @@ exports.respond = (res, payload, status = 200, type = 'text') => {
 
 exports.browserify = () => {
 	return new Promise((resolve, reject) => {
-		b.add(Utils.getPath('client.js'));
+		Utils.config().client.files.forEach((file) => b.add(Utils.getPath(`client/${file}`)));
+		//b.add(Utils.getPath('client.js'));
 		b.bundle((err, buf) => {
 			if (err) reject(err);
 			else resolve(buf.toString());

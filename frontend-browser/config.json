@@ -4,5 +4,9 @@
 		"https": false,
 		"privateKey": "",
 		"fullchain": ""
+	},
+
+	"client": {
+		"files": ["client.js"]
 	}
 }
