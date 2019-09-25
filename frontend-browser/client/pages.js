@@ -1,3 +1,9 @@
+window.fetchPage = function (route) {
+	this.fetch(route)
+		.then((res) => res.text())
+		.then((text) => $('#content').html(text));
+};
+
 window.pageNewUser = function () {
 	this.fetch('/html/newUser.html')
 		.then((res) => res.text())
