@@ -2,6 +2,16 @@ const HOST = 'localhost';
 const PORT = 34682;
 const BASE_URL = `http://${HOST}:${PORT}`;
 
+window.tokenCheck = function () {
+	let token = Cookies.get('token');
+	if (token == null) alert('Please sign in');
+	else return true;
+};
+
+window.tokenGet = function () {
+	let token = Cookies.get('token');
+}
+
 window.signUp = function () {
 	$('#loading').show();
 	let username = $('#username').val();
