@@ -22,7 +22,7 @@ router.get('/create/:recipientName', (req, res) => {
 			let response = Utils.buildResponse(template, { chatId: chatId });
 			Utils.respond(res, response);
 		})
-		.catch((err), Utils.respond(res, err));
+		.catch((err) => Utils.respond(res, err));
 });
 
 router.get('/list', (req, res) => {
