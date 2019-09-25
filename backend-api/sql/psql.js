@@ -65,7 +65,7 @@ exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
 
 exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
 
-exports.messagesCreate = (messageId, chatId, data, timestamp, senderId, recipientId) => query(QUERIES.messages.create, [messageId, chatId, data, timestamp, senderId, recipientId]);
+exports.messagesCreate = (messageId, chatId, data, timestamp, senderId, recipientId) => query(QUERIES.messages.create, [messageId, chatId, data, /*timestamp,*/ senderId, recipientId]);
 
 exports.messagesList = (chatId) => query(QUERIES.messages.list, [chatId]);
 
