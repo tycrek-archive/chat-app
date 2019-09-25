@@ -1,6 +1,6 @@
 const HOST = 'localhost';
 const PORT = 34682;
-const BASE_URL = `http://${HOST}:${PORT}`;
+const BASE = `http://${HOST}:${PORT}`;
 
 window.tokenCheck = function () {
 	let token = Cookies.get('token');
@@ -17,7 +17,7 @@ window.signUp = function () {
 	let username = $('#username').val();
 	let password = btoa($('#password').val());
 
-	this.fetch(`http://${SERVER}:34682/user/create/${username}/${password}`)
+	this.fetch(`${BASE}/user/create/${username}/${password}`)
 		.then((res) => res.json())
 		.then((json) => {
 			$('#loading').hide();
@@ -32,7 +32,7 @@ window.login = function () {
 	let username = $('#username').val();
 	let password = btoa($('#password').val());
 
-	this.fetch(`http://${SERVER}:34682/user/login/${username}/${password}`)
+	this.fetch(`${BASE}/user/login/${username}/${password}`)
 		.then((res) => res.json())
 		.then((json) => {
 			$('#loading').hide();
@@ -41,7 +41,7 @@ window.login = function () {
 		})
 		.then((token) => {
 			Cookies.set('token', token, { expires: 7 });
-			return this.fetch(`http://${SERVER}:34682/keypairs/private?token=${token}`);
+			return this.fetch(`${BASE}/keypairs/private?token=${token}`);
 		})
 		.then((res) => res.json())
 		.then((json) => json.data.privKey)
@@ -54,7 +54,7 @@ window.listChats = function () {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
-		this.fetch(`http://${SERVER}:34682/chats/list?token=${token}`)
+		this.fetch(`${BASE}/chats/list?token=${token}`)
 			.then((res) => res.json())
 			.then((json) => {
 				$('#loading').hide();
@@ -72,7 +72,7 @@ window.createChat = function () {
 	else {
 		let recipient = $('#recipient').val();
 
-		this.fetch(`http://${SERVER}:34682/chats/create/${recipient}?token=${token}`)
+		this.fetch(`${BASE}/chats/create/${recipient}?token=${token}`)
 			.then((res) => res.json())
 			.then((json) => {
 				if (json.code != 200) this.alert(json.reason);
@@ -89,7 +89,7 @@ window.sendMessage = function (chatId) {
 		let message = $('#message').val();
 		let recipient = $('#recipient').val();
 
-		this.fetch(`http://${SERVER}:34682/keypairs/public/${recipient}?token=${token}`)
+		this.fetch(`${BASE}/keypairs/public/${recipient}?token=${token}`)
 			.then((res) => res.json())
 			.then((json) => {
 				if (json.code != 200) this.alert(json.reason);
@@ -97,7 +97,7 @@ window.sendMessage = function (chatId) {
 			})
 			.then((pubKey) => encrypt(message, pubKey))
 			.then((encrypted) => this.btoa(encrypted))
-			.then((encoded) => this.fetch(`http://${SERVER}:34682/messages/create/${chatId}/${encoded}?token=${token}`))
+			.then((encoded) => this.fetch(`${BASE}/messages/create/${chatId}/${encoded}?token=${token}`))
 			.then((res) => res.json())
 			.then((json) => {
 				if (json.code != 200) this.alert(json.reason);
@@ -112,7 +112,7 @@ window.listMessages = function () {
 	else {
 		$('#loading').show();
 		let chatId = $('#chatId').val();
-		this.fetch(`http://${SERVER}:34682/messages/list/${chatId}?token=${token}`)
+		this.fetch(`${BASE}/messages/list/${chatId}?token=${token}`)
 			.then((res) => res.json())
 			.then((json) => {
 				$('#loading').hide();
