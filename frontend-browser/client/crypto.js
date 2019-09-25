@@ -27,7 +27,6 @@ window.validatePassword = (password) => {
 	let NUMBER = new RegExp(/[0-9]/g);
 	let SYMBOL = new RegExp(/[`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
 	let ALLOWED_CHARS = RegExp(/[A-z0-9`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
-	//TODO: Any characters not included in the above should be denied (maybe?)
 
 	if (
 		password.length >= MIN_LENGTH &&
