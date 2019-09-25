@@ -37,3 +37,16 @@ window.validatePassword = (password) => {
 	) return true;
 	else return false;
 }
+
+window.passwordRequirements = function () {
+	let requirements = `
+	<pre style="text-align: left;">
+	Password must meet requirements:
+	- Minimum length of 12
+	- Mix of upper and lower case
+	- Numbers
+	- Symbols
+	</pre>
+	`;
+	return requirements;
+}

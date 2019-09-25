@@ -4,8 +4,33 @@
 		<br>
 		Username: <input id="username" type="text"><br>
 		Password: <input id="password" type="password"><br>
+		Confirm: <input id="password2" type="password"><br>
+		<h4 id="status" hidden>&nbsp;</h4>
 		<br>
 		<button onclick="signUp()">Sign up</button><br>
 		<h4 id="loading" hidden>Loading...</h4>
 	</center>
 </div>
+<script type="text/javascript">
+	// Check if password meets requirements
+	$('#password').on('input', () => {
+		let password = $('#password').val();
+		if (!validatePassword(password)) {
+			$('#status').html(passwordRequirements()).show();
+		} else {
+			$('#status').hide();
+		}
+	});
+
+	// Verify both passwords
+	$('#password2').on('input', () => {
+		let password = $('#password').val();
+		let password2 = $('#password2').val();
+
+		if (password !== password2) {
+			$('#status').html('<pre>Passwords must match</pre>').show();
+		} else {
+			$('#status').hide();
+		}
+	});
+</script>
