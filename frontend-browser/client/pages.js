@@ -1,3 +1,5 @@
+// Functions within this file are responsible for fetching HTML and updating the UI
+
 window.fetchPage = function (route) {
 	this.fetch(route)
 		.then((res) => res.text())
