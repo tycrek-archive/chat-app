@@ -25,7 +25,8 @@ window.validatePassword = (password) => {
 	let LOWER = new RegExp(/[a-z]/g);
 	let UPPER = new RegExp(/[A-Z]/g);
 	let NUMBER = new RegExp(/[0-9]/g);
-	let SYMBOL = new RegExp(/[ `~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
+	let SYMBOL = new RegExp(/[`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
+	let ALLOWED_CHARS = RegExp(/[A-z0-9`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
 	//TODO: Any characters not included in the above should be denied (maybe?)
 
 	if (
@@ -33,7 +34,8 @@ window.validatePassword = (password) => {
 		password.match(LOWER).length >= MIN_EACH &&
 		password.match(UPPER).length >= MIN_EACH &&
 		password.match(NUMBER).length >= MIN_EACH &&
-		password.match(SYMBOL).length >= MIN_EACH
+		password.match(SYMBOL).length >= MIN_EACH &&
+		password.length == password.match(ALLOWED_CHARS).length
 	) return true;
 	else return false;
 }
@@ -53,6 +55,7 @@ window.passwordRequirements = function () {
 
 window.validateUsername = (username) => {
 	let MAX_LENGTH = 24;
+	let MIN_LENGTH = 3;
 	let REGEX = /[A-z0-9._]/g
 	let ALLOWED_CHARS = new RegExp(REGEX);
 
@@ -60,6 +63,7 @@ window.validateUsername = (username) => {
 	console.log(username.match(ALLOWED_CHARS).length);
 	if (
 		username.length <= MAX_LENGTH &&
+		username.legnth >= MIN_LENGTH &&
 		username.length == username.match(ALLOWED_CHARS).length
 	) return true;
 	else return false;
