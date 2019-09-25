@@ -35,6 +35,12 @@ window.pageChats = function () {
 		.then((body) => $('#content').html(body));
 };
 
+window.pageMessages = function () {
+	this.fetch('/html/messages.html')
+		.then((res) => res.text())
+		.then((text) => $('#content').html(text));
+}
+
 window.signUp = function () {
 	$('#loading').show();
 	let username = $('#username').val();
