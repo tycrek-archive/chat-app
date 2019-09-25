@@ -22,7 +22,7 @@ router.get('/create/:chatId/:data', (req, res) => {
 		.catch((err) => {
 			let template = Utils.config().response.error;
 			let response = Utils.buildResponse(template, { err: err });
-			Utils.send(res, response);
+			Utils.respond(res, response);
 		});
 });
 
