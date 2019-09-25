@@ -61,7 +61,7 @@ exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], 
 
 exports.chatsCreate = (chatId, senderId, recipientId) => query(QUERIES.chats.create, [chatId, senderId, recipientId]);
 
-exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
+exports.chatsList = (userId) => query(QUERIES.chats.list, [userId, userId]);
 
 exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
 
