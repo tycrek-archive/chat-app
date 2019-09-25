@@ -1,0 +1,66 @@
+On User Create:
+
+1. Client side input validation:
+	1. username meets requirements
+		- min 3
+		- max 24
+		- only letters, numbers, periods, hyphen, underscore
+	2. password meets requirements?
+		- min 12
+		- max 128
+		- lower, upper, number, symbols required
+2. Encode both to base64
+3. Send to server
+4. Decode from base64
+5. Server side input validation
+	- same as listed above
+	BAD: send loginError 400
+	GOOD: continue -->
+6. Check if username exists in SQL
+	BAD: send loginError 400
+	GOOD: continue -->
+7. SQL User Create
+	1. Generate UUID
+	2. Generate password hash
+	3. Generate keypairs
+8. SQL transactional query
+	BAD: revert queries, send 500 error
+	GOOD: return 200 success
+
+
+On User Login:
+
+1. Encode username/password to base64
+2. Send to server
+3. Decode from base64
+4. SQL UserInfo
+5. Dataset Zero rows
+	BAD: respond loginError 400
+	GOOD: return UUID and hash
+6. Compare password with hash
+	BAD: respond loginError 400
+	GOOD: continue -->
+7. Generate token and UUID
+8. SQL SessionCreate
+	BAD: send 500 error
+	GOOD: send 200 success with token
+
+
+On Chat Create:
+
+1. Create two chats
+	- swap sender and recipient on both
+
+On Send Message:
+
+1. Fetch Public Key of recipient
+2. Encrypt data with Public Keys of both sender and recipient
+3. Encode recipient and datas to base64
+4. Send to server
+5. Create two new Messages:
+	1. Recipients copy
+		- can be decrypted with recipient private key
+		- chatId is one where recipient is recipient
+	2. Sender copy
+		- can be decrypted with sender private key
+		- chatId is one where sender is sender
