@@ -1,4 +1,6 @@
-const SERVER = 'localhost';
+const HOST = 'localhost';
+const PORT = 34682;
+const BASE_URL = `http://${HOST}:${PORT}`;
 
 window.signUp = function () {
 	$('#loading').show();
