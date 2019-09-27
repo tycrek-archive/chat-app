@@ -4,14 +4,14 @@ var b = Browserify();
 
 var Utils = this;
 
-var config = {};
-exports.config = () => config;
+//var config = {};
+//exports.config = () => config;
 
 // Initialize the server
 exports.init = () => {
 	return new Promise((resolve, reject) => {
 		fse.readJson(Utils.getPath('config.json'))
-			.then((obj) => config = obj)
+			.then((obj) => exports.config = obj)
 			.then(() => resolve(Utils.config.server))
 			.catch((err) => reject(err));
 	});
