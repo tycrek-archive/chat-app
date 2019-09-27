@@ -37,16 +37,13 @@ window.login = function () {
 		.then((json) => {
 			$('#loading').hide();
 			if (json.code != 200) this.alert(json.reason);
-			else return json.data.token;
+			else return json.data;
 		})
-		.then((token) => {
-			Cookies.set('token', token, { expires: 7 });
-			return this.fetch(`${BASE}/keypairs/private?token=${token}`);
+		.then((data) => {
+			Cookies.set('unlockkey', decrypt(data.user.unlockkey, data.user.privkey1, atob(password)));
+			Cookies.set('token', data.token, { expires: 7 });
+			Cookies.set('privkey2', btoa(data.user.privkey2));
 		})
-		.then((res) => res.json())
-		.then((json) => json.data.privKey)
-		.then((privKey) => this.localStorage.setItem('privKey', privKey))
-		.then(() => this.localStorage.setItem('password', atob(password)))
 		.then(() => pageChats());
 }
 
