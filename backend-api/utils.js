@@ -62,7 +62,7 @@ exports.validate = (req) => {
 			.then((session) => {
 				let now = Utils.utcStamp();
 				let expiry = Utils.tdFormat(session.expiry, 'x');
-				if (expiry > now) return session.user_uuid;
+				if (expiry > now) return session.userid;
 				else throw Utils.config.response.forbidden;
 			})
 			.then((uuid) => Psql.userInfo(false, uuid))

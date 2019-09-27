@@ -30,7 +30,7 @@ router.get('/list', (req, res) => {
 	let token = req.query.token;
 
 	Psql.sessionGet(token)
-		.then((dataset) => dataset[0].user_uuid)
+		.then((dataset) => dataset[0].userid)
 		.then((userId) => Psql.chatsList(userId))
 		.then((dataset) => {
 			let template = Utils.config.response.success;

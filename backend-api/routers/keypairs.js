@@ -28,7 +28,7 @@ router.get('/private', (req, res) => {
 			if (dataset.length > 0) return dataset[0];
 			else throw Utils.config.response.error;
 		})
-		.then((session) => session.user_uuid)
+		.then((session) => session.userid)
 		.then((uuid) => Psql.keypairsGet(true, uuid))
 		.then((dataset) => {
 			let key = dataset[0].privkey;
