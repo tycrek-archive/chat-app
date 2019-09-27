@@ -107,3 +107,5 @@ exports.buildResponse = (response, data) => {
 	response.data = data;
 	return response;
 }
+
+exports.datasetEmpty = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? resolve() : reject());

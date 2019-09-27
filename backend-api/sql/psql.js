@@ -45,9 +45,9 @@ exports.init = () => {
 	}
 }
 
-exports.userCreate = (name, uuid, hash) => query(QUERIES.user.create, [name, uuid, hash]);
+exports.userCreate = (values) => query(QUERIES.user.create, values);
 
-exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'name' : 'uuid']);
+exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']);
 
 exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 
