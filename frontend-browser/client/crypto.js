@@ -55,14 +55,12 @@ window.passwordRequirements = function () {
 window.validateUsername = (username) => {
 	let MAX_LENGTH = 24;
 	let MIN_LENGTH = 3;
-	let REGEX = /[A-z0-9._]/g
+	let REGEX = /[A-z0-9._]/g;
 	let ALLOWED_CHARS = new RegExp(REGEX);
 
-	console.log(username.length);
-	console.log(username.match(ALLOWED_CHARS).length);
 	if (
 		username.length <= MAX_LENGTH &&
-		username.legnth >= MIN_LENGTH &&
+		username.length >= MIN_LENGTH &&
 		username.length == username.match(ALLOWED_CHARS).length
 	) return true;
 	else return false;
