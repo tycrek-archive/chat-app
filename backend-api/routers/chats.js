@@ -9,10 +9,10 @@ router.get('/create/:recipientName', (req, res) => {
 
 	let chatId, senderId, recipientId;
 	Psql.sessionGet(token)
-		.then((dataset) => dataset[0].user_uuid)
+		.then((dataset) => dataset[0].userid)
 		.then((mSenderId) => senderId = mSenderId)
 		.then(() => Psql.userInfo(true, recipientName))
-		.then((dataset) => dataset[0].uuid)
+		.then((dataset) => dataset[0].userid)
 		.then((mRecipientId) => recipientId = mRecipientId)
 		.then(() => Crypto.generateUuid())
 		.then((mChatId) => chatId = mChatId)
@@ -20,9 +20,10 @@ router.get('/create/:recipientName', (req, res) => {
 		.then(() => {
 			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { chatId: chatId });
-			Utils.respond(res, response);
+			return response;
 		})
-		.catch((err) => Utils.respond(res, err));
+		.catch((err) => Utils.buildError(err))
+		.then((response) => Utils.respond(res, response));
 });
 
 router.get('/list', (req, res) => {
