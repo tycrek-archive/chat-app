@@ -108,8 +108,10 @@ exports.buildResponse = (response, data = {}) => {
 	return response;
 }
 
-exports.buildErrorJson = (err, response = Utils.config.response.error) => {
-	//
+exports.buildError = (err, response = Utils.config.response.error) => {
+	let tmp = JSON.stringify(err, Object.getOwnPropertyNames(err));
+	response.data = tmp;
+	return response;
 }
 
 exports.datasetEmpty = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? resolve() : reject());

@@ -40,16 +40,10 @@ router.get('/create/:username/:password', (req, res) => {
 			.then((dataset) => Utils.datasetEmpty(dataset))
 			.then(() => userId = Crypto.generateUuid())
 			.then(() => Crypto.generateKeyPair(password))
-			.then(([pubKey, privKey]) => {
-				pubKey1 = pubKey;
-				privKey1 = privKey;
-			})
+			.then(([pubKey, privKey]) => (pubKey1 = pubKey, privKey1 = privKey))
 			.then(() => unlockKeyRaw = Crypto.generateToken())
 			.then(() => Crypto.generateKeyPair(unlockKeyRaw))
-			.then(([pubKey, privKey]) => {
-				pubKey2 = pubKey;
-				privKey2 = privKey;
-			})
+			.then(([pubKey, privKey]) => (pubKey2 = pubKey, privKey2 = privKey))
 			.then(() => Crypto.encrypt(unlockKeyRaw, pubKey1))
 			.then((encrypted) => unlockKey = encrypted)
 			.then(() => Crypto.generateHash(password))
@@ -68,12 +62,9 @@ router.get('/create/:username/:password', (req, res) => {
 				Psql.userCreate(values);
 			})
 			.then(() => Utils.respond(res, Utils.config.response.success))
-			.catch((err) => {
-				console.log(err);
-				Utils.respond(res, err, 400, 'text');
-			});
+			.catch((err) => Utils.respond(res, Utils.buildError(err)));
 	} else {
-		Utils.respond(res, Utils.respond(res, Utils.config.response.loginFailed));
+		Utils.respond(res, Utils.config.response.loginFailed);
 	}
 });
 
