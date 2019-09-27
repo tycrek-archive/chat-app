@@ -67,8 +67,9 @@ router.get('/create/:username/:password', (req, res) => {
 			.then((values) => Psql.userCreate(values))
 
 			// Send a response
-			.then(() => Utils.respond(res, Utils.config.response.success))
-			.catch((err) => Utils.respond(res, Utils.buildError(err)));
+			.then(() => Utils.config.response.success)
+			.catch((err) => Utils.buildError(err))
+			.then((response) => Utils.respond(res, response));
 	} else {
 		Utils.respond(res, Utils.config.response.loginFailed);
 	}
@@ -81,25 +82,26 @@ router.get('/login/:username/:password', (req, res) => {
 
 	const loginError = Utils.config.response.loginFailed;
 
-	let userUuid, sessionId, token;
+	let userData, sessionId, token;
 	Psql.userInfo(true, username)
-		.then((dataset) => {
-			if (dataset.length > 0) return dataset[0];
-			else throw loginError;
-		})
-		.then((userInfo) => {
-			userUuid = userInfo.uuid;
+		.then((dataset) => Utils.datasetFull(dataset))
+		.then((dataset) => dataset[0])
+		.then((mUserData) => {
+			userData = mUserData;
 			sessionId = Crypto.generateUuid();
 			token = Crypto.generateToken();
-			return Crypto.comparePassHash(password, userInfo.hash);
+			return Crypto.comparePassHash(password, userData.passhash);
 		})
 		.then((same) => {
-			if (same) return Psql.sessionCreate(sessionId, userUuid, token);
+			if (same) return Psql.sessionCreate(sessionId, userData.userid, token);
 			else throw loginError;
 		})
-		.then(() => Utils.buildNewResponse(200, 'Success', {token: token}))
-		.catch((err) => err)
-		.then((data) => Utils.respond(res, data));
+		.then(() => Utils.buildResponse(Utils.config.response.success, {
+			token: token,
+			user: userData
+		}))
+		.catch((err) => Utils.buildError(err, Utils.config.response.loginFailed))
+		.then((response) => Utils.respond(res, response));
 });
 
 module.exports = router;
