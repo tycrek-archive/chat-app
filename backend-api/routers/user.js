@@ -37,30 +37,36 @@ router.get('/create/:username/:password', (req, res) => {
 		Crypto.passwordMeetsRequirements(password)
 	) {
 		Psql.userInfo(true, username)
+			// Check if any users already exist (datasetEmpty throws error if 1 or more rows)
 			.then((dataset) => Utils.datasetEmpty(dataset))
+
+			// Generate a UUID for the new user
 			.then(() => userId = Crypto.generateUuid())
+
+			// Generate keypair1 using the password for the user
 			.then(() => Crypto.generateKeyPair(password))
 			.then(([pubKey, privKey]) => (pubKey1 = pubKey, privKey1 = privKey))
+
+			// Generate an unlock key for decrypting messages
 			.then(() => unlockKeyRaw = Crypto.generateToken())
+
+			// Generate keypair2 using the unlock key
 			.then(() => Crypto.generateKeyPair(unlockKeyRaw))
 			.then(([pubKey, privKey]) => (pubKey2 = pubKey, privKey2 = privKey))
+
+			// Encrypt the unlock key using keypair1 (decrypted on user login)
 			.then(() => Crypto.encrypt(unlockKeyRaw, pubKey1))
 			.then((encrypted) => unlockKey = encrypted)
+
+			// Generate a password hash to safely store the password in the database
 			.then(() => Crypto.generateHash(password))
 			.then((hash) => passHash = hash)
-			.then(() => {
-				let values = [
-					username,
-					userId,
-					passHash,
-					unlockKey,
-					pubKey1,
-					pubKey2,
-					privKey1,
-					privKey2
-				];
-				Psql.userCreate(values);
-			})
+
+			// Build an array to pass to SQL
+			.then(() => [username, userId, passHash, unlockKey, pubKey1, pubKey2, privKey1, privKey2])
+			.then((values) => Psql.userCreate(values))
+
+			// Send a response
 			.then(() => Utils.respond(res, Utils.config.response.success))
 			.catch((err) => Utils.respond(res, Utils.buildError(err)));
 	} else {
