@@ -114,4 +114,4 @@ exports.buildError = (err, response = Utils.config.response.error) => {
 	return response;
 }
 
-exports.datasetEmpty = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? resolve() : reject());
+exports.datasetEmpty = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? resolve(dataset) : reject());
