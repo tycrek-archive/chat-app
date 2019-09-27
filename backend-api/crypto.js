@@ -9,7 +9,7 @@ var Utils = require('./utils');
 // Salt rounds set in config.json
 exports.generateHash = (password) => {
 	return new Promise((resolve, reject) => {
-		bcrypt.genSalt(Utils.config().security.saltRounds)
+		bcrypt.genSalt(Utils.config.security.saltRounds)
 			.then((salt) => bcrypt.hash(password, salt))
 			.then((hash) => resolve(hash))
 			.catch((err) => reject(err));
@@ -29,7 +29,7 @@ exports.comparePassHash = (password, hash) => {
 exports.generateUuid = () => uuidv4();
 
 // Generate a hex token of length 32 (string length = 64 after converting bytes to hex)
-exports.generateToken = (length = Utils.config().security.tokenLength) => crypto.randomBytes(length).toString('hex');
+exports.generateToken = (length = Utils.config.security.tokenLength) => crypto.randomBytes(length).toString('hex');
 
 // Check if the password meets the requirements
 exports.passwordMeetsRequirements = (password) => {

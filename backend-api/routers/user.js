@@ -67,13 +67,13 @@ router.get('/create/:username/:password', (req, res) => {
 				];
 				Psql.userCreate(values);
 			})
-			.then(() => Utils.respond(res, Utils.config().response.success))
+			.then(() => Utils.respond(res, Utils.config.response.success))
 			.catch((err) => {
 				console.log(err);
 				Utils.respond(res, err, 400, 'text');
 			});
 	} else {
-		Utils.respond(res, Utils.respond(res, Utils.config().response.loginFailed));
+		Utils.respond(res, Utils.respond(res, Utils.config.response.loginFailed));
 	}
 });
 
@@ -82,7 +82,7 @@ router.get('/login/:username/:password', (req, res) => {
 	let username = req.params.username;
 	let password = Utils.b642str(req.params.password);
 
-	const loginError = Utils.config().response.loginFailed;
+	const loginError = Utils.config.response.loginFailed;
 
 	let userUuid, sessionId, token;
 	Psql.userInfo(true, username)

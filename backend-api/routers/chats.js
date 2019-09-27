@@ -18,7 +18,7 @@ router.get('/create/:recipientName', (req, res) => {
 		.then((mChatId) => chatId = mChatId)
 		.then(() => Psql.chatsCreate(chatId, senderId, recipientId))
 		.then(() => {
-			let template = Utils.config().response.success;
+			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { chatId: chatId });
 			Utils.respond(res, response);
 		})
@@ -32,7 +32,7 @@ router.get('/list', (req, res) => {
 		.then((dataset) => dataset[0].user_uuid)
 		.then((userId) => Psql.chatsList(userId))
 		.then((dataset) => {
-			let template = Utils.config().response.success;
+			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { chats: dataset });
 			Utils.respond(res, response);
 		})

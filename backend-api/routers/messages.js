@@ -18,9 +18,9 @@ router.get('/create/:chatId/:data', (req, res) => {
 			messageId = Crypto.generateUuid();
 		})
 		.then(() => Psql.messagesCreate(messageId, chatId, data, timestamp, senderId, recipientId))
-		.then(() => Utils.respond(res, Utils.config().response.success))
+		.then(() => Utils.respond(res, Utils.config.response.success))
 		.catch((err) => {
-			let template = Utils.config().response.error;
+			let template = Utils.config.response.error;
 			let response = Utils.buildResponse(template, { err: err });
 			Utils.respond(res, response);
 		});
@@ -32,12 +32,12 @@ router.get('/list/:chatId', (req, res) => {
 
 	Psql.messagesList(chatId)
 		.then((dataset) => {
-			let template = Utils.config().response.success;
+			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { messages: dataset });
 			Utils.respond(res, response);
 		})
 		.catch((err) => {
-			let template = Utils.config().response.error;
+			let template = Utils.config.response.error;
 			let response = Utils.buildResponse(template, { err: err });
 			Utils.send(res, response);
 		});

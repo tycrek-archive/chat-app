@@ -12,7 +12,7 @@ exports.init = () => {
 	return new Promise((resolve, reject) => {
 		fse.readJson(Utils.getPath('config.json'))
 			.then((obj) => config = obj)
-			.then(() => resolve(Utils.config().server))
+			.then(() => resolve(Utils.config.server))
 			.catch((err) => reject(err));
 	});
 }
@@ -31,7 +31,7 @@ exports.respond = (res, payload, status = 200, type = 'text') => {
 
 exports.browserify = () => {
 	return new Promise((resolve, reject) => {
-		Utils.config().client.files.forEach((file) => b.add(Utils.getPath(`client/${file}`)));
+		Utils.config.client.files.forEach((file) => b.add(Utils.getPath(`client/${file}`)));
 		//b.add(Utils.getPath('client.js'));
 		b.bundle((err, buf) => {
 			if (err) reject(err);

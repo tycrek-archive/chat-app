@@ -8,13 +8,13 @@ router.get('/public/:toUser', (req, res) => {
 	Psql.userInfo(true, toUser)
 		.then((dataset) => {
 			if (dataset.length > 0) return dataset[0];
-			else throw Utils.config().response.error;
+			else throw Utils.config.response.error;
 		})
 		.then((user) => user.uuid)
 		.then((uuid) => Psql.keypairsGet(false, uuid))
 		.then((dataset) => {
 			let key = dataset[0].pubkey;
-			let template = Utils.config().response.success;
+			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { pubKey: key });
 			Utils.respond(res, response);
 		})
@@ -26,13 +26,13 @@ router.get('/private', (req, res) => {
 	Psql.sessionGet(token)
 		.then((dataset) => {
 			if (dataset.length > 0) return dataset[0];
-			else throw Utils.config().response.error;
+			else throw Utils.config.response.error;
 		})
 		.then((session) => session.user_uuid)
 		.then((uuid) => Psql.keypairsGet(true, uuid))
 		.then((dataset) => {
 			let key = dataset[0].privkey;
-			let template = Utils.config().response.success;
+			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { privKey: key });
 			Utils.respond(res, response);
 		})

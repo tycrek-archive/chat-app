@@ -7,16 +7,16 @@ var moment = require('moment');
 var Psql = require('./sql/psql');
 var Utils = this;
 
-var config = {};
-exports.config = () => config;
+//var config = {};
+//exports.config = () => config;
 
 // Initialize the server
 exports.init = () => {
 	return new Promise((resolve, reject) => {
 		fse.readJson(Utils.getPath('config.json'))
-			.then((obj) => config = obj)
+			.then((obj) => exports.config = obj)
 			.then(() => Psql.init())
-			.then(() => resolve(Utils.config().server))
+			.then(() => resolve(Utils.config.server))
 			.catch((err) => reject(err));
 	});
 }
@@ -52,28 +52,28 @@ exports.validate = (req) => {
 		let token = req.query.token;
 
 		if (_isPublicRoute(path)) return resolve();
-		if (token == null || token.length == 0) return reject(Utils.config().response.unauthorized);
+		if (token == null || token.length == 0) return reject(Utils.config.response.unauthorized);
 
 		Psql.sessionGet(token)
 			.then((dataset) => {
 				if (dataset.length > 0) return dataset[0];
-				else throw Utils.config().response.unauthorized;
+				else throw Utils.config.response.unauthorized;
 			})
 			.then((session) => {
 				let now = Utils.utcStamp();
 				let expiry = Utils.tdFormat(session.expiry, 'x');
 				if (expiry > now) return session.user_uuid;
-				else throw Utils.config().response.forbidden;
+				else throw Utils.config.response.forbidden;
 			})
 			.then((uuid) => Psql.userInfo(false, uuid))
 			.then((dataset) => {
 				if (dataset.length > 0) return dataset[0];
-				else throw Utils.config().response.unauthorized;
+				else throw Utils.config.response.unauthorized;
 			})
 			.then((user) => {
 				return;
 				if (user.name === 'admin') return;
-				else throw Utils.config().response.forbidden;
+				else throw Utils.config.response.forbidden;
 			})
 			.then(() => resolve())
 			.catch((err) => {
@@ -83,7 +83,7 @@ exports.validate = (req) => {
 	});
 
 	function _isPublicRoute(path) {
-		let routes = Utils.config().publicRoutes;
+		let routes = Utils.config.publicRoutes;
 		for (i = 0; i < routes.length; i++) {
 			route = routes[i];
 			if (path === '/' || path.includes(route)) return true;
@@ -103,9 +103,13 @@ exports.buildNewResponse = (code, reason, data={}) => {
 	return response;
 }
 
-exports.buildResponse = (response, data) => {
+exports.buildResponse = (response, data = {}) => {
 	response.data = data;
 	return response;
+}
+
+exports.buildErrorJson = (err, response = Utils.config.response.error) => {
+	//
 }
 
 exports.datasetEmpty = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? resolve() : reject());

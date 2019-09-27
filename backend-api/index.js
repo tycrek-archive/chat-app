@@ -46,7 +46,7 @@ app.get('/bundle.js', (_req, res) => {
 	require('fs-extra').readFile(utils.getPath('bundle.js'))
 		.then((bytes) => bytes.toString())
 		.then((data) => utils.respond(res, data, 200, 'js'))
-		.catch((err) => utils.respond(res, utils.config().response.error));
+		.catch((err) => utils.respond(res, utils.config.response.error));
 });
 
 // Router for any 'user' routes
