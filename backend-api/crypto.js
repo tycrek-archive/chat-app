@@ -38,15 +38,30 @@ exports.passwordMeetsRequirements = (password) => {
 	let LOWER = new RegExp(/[a-z]/g);
 	let UPPER = new RegExp(/[A-Z]/g);
 	let NUMBER = new RegExp(/[0-9]/g);
-	let SYMBOL = new RegExp(/[ `~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
-	//TODO: Any characters not included in the above should be denied (maybe?)
+	let SYMBOL = new RegExp(/[`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
+	let ALLOWED_CHARS = RegExp(/[A-z0-9`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
 
 	if (
 		password.length >= MIN_LENGTH &&
 		password.match(LOWER).length >= MIN_EACH &&
 		password.match(UPPER).length >= MIN_EACH &&
 		password.match(NUMBER).length >= MIN_EACH &&
-		password.match(SYMBOL).length >= MIN_EACH
+		password.match(SYMBOL).length >= MIN_EACH &&
+		password.length == password.match(ALLOWED_CHARS).length
+	) return true;
+	else return false;
+}
+
+exports.usernameMeetsRequirements = (username) => {
+	let MAX_LENGTH = 24;
+	let MIN_LENGTH = 3;
+	let REGEX = /[A-z0-9._]/g
+	let ALLOWED_CHARS = new RegExp(REGEX);
+
+	if (
+		username.length <= MAX_LENGTH &&
+		username.length >= MIN_LENGTH &&
+		username.length == username.match(ALLOWED_CHARS).length
 	) return true;
 	else return false;
 }
