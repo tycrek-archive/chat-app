@@ -60,7 +60,7 @@ window.listChats = function () {
 	if (token == null) alert('Please sign in');
 	else {
 		let template;
-		this.fetch('/html/chat_item.html')
+		this.fetch('/html/chat_item.mustache')
 			.then((res) => res.text())
 			.then((text) => template = text)
 			.then(() => this.fetch(`${BASE}/chats/list?token=${token}`))
