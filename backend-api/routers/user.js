@@ -104,4 +104,18 @@ router.get('/login/:username/:password', (req, res) => {
 		.then((response) => Utils.respond(res, response));
 });
 
+router.get('/getWithUuid/:recipientId', (req, res) => {
+	let recipientId = req.paramss.recipientId;
+
+	Psql.userInfo(false, recipientId)
+		.then((dataset) => dataset[0])
+		.then((user) => {
+			let template = Utils.config.response.success;
+			let response = Utils.buildResponse(template, { user: user });
+			return response;
+		})
+		.catch((err) => Utils.buildError(err, utils.config.response.error))
+		.then((response) => Utils.respond(res, response));
+});
+
 module.exports = router;
