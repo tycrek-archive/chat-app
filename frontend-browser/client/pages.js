@@ -21,6 +21,6 @@ window.pageChats = function () {
 
 window.pageMessages = function (chatId) {
 	fetchPage('/html/messages.html', () => {
-		listMessages(chatId);
+		getChat(chatId);
 	});
 };
