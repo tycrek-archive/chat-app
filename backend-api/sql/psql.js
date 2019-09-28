@@ -46,31 +46,28 @@ exports.init = () => {
 }
 
 exports.userCreate = (values) => query(QUERIES.user.create, values);
-
 exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']);
 
-exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 
+exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
+
 
 exports.anyQuery = (text) => query(text);
 
-exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
 
+exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
 exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privkey' : 'pubkey']);
 
-exports.chatsCreate = (chatId, senderId, recipientId, partnerId) => query(QUERIES.chats.create, [chatId, senderId, recipientId, partnerId]);
 
+exports.chatsCreate = (userA, userB) => query(QUERIES.chats.create, [userA, userB]);
 exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
-
 exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
+exports.chatsExist = (userA, userB) => query(QUERIES.chats.exist, [userA, userB, userB, userA]);
 
-exports.chatsExist = (senderId, recipientId) => query(QUERIES.chats.exist, [senderId, recipientId]);
 
 exports.messagesCreate = (messageId, chatId, data, timestamp, senderId, recipientId) => query(QUERIES.messages.create, [messageId, chatId, data, /*timestamp,*/ senderId, recipientId]);
-
 exports.messagesList = (chatId) => query(QUERIES.messages.list, [chatId]);
-
 exports.messagesGet = (messageId) => query(QUERIES.messages.get, [messageId]);
 
 function query(text, values, array) {
