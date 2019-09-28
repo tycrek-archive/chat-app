@@ -69,7 +69,6 @@ window.listChats = function () {
 				$('#loading').hide();
 				if (json.code != 200) this.alert(json.reason);
 				else {
-					//$('#chat-list').html(JSON.stringify(json.data.chats, null, 4));
 					json.data.chats.forEach((chat) => {
 						let name = chat.chatid;
 						let chatid = chat.chatid;
