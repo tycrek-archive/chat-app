@@ -31,6 +31,7 @@
 		"chats.create",
 		"chats.list",
 		"chats.get",
+		"chats.exist",
 
 		"messages.create",
 		"messages.list",

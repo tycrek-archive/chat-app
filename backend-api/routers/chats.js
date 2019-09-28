@@ -16,6 +16,9 @@ router.get('/create/:recipientName', (req, res) => {
 		.then((dataset) => dataset[0].userid)
 		.then((mRecipientId) => recipientId = mRecipientId)
 
+		.then(() => Psql.chatsExist(senderId, recipientId))
+		.then((dataset) => Utils.datasetEmpty(dataset))
+
 		.then(() => Crypto.generateUuid())
 		.then((mChatId1) => chatId1 = mChatId1)
 
