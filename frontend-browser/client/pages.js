@@ -19,7 +19,7 @@ window.pageChats = function () {
 	fetchPage('/html/chats.html');
 };
 
-window.pageMessages = function (chatId) {
+window.pageMessages = function (name) {
 	fetchPage('/html/messages.html', () => {
 		getChat(chatId);
 	});
