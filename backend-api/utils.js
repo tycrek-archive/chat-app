@@ -109,6 +109,7 @@ exports.buildResponse = (response, data = {}) => {
 }
 
 exports.buildError = (err, response = Utils.config.response.error) => {
+	console.log(err);
 	let tmp = JSON.stringify(err, Object.getOwnPropertyNames(err));
 	response.data = tmp;
 	return response;
