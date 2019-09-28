@@ -1,1 +1,1 @@
-INSERT INTO chats(chatid, senderid, recipientid, partnerid) VALUES($1, $2, $3, $4);
+INSERT INTO chats(userA, userB) VALUES($1, $2);

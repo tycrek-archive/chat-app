@@ -1,1 +1,1 @@
-SELECT * FROM chats WHERE senderid = $1 AND recipientid = $2;
+SELECT * FROM chats WHERE (usera = $1 AND userb = $2) OR (usera = $3 AND userb = $4);
