@@ -48,4 +48,10 @@ router.get('/list', (req, res) => {
 		.then((response) => Utils.respond(res, response));
 });
 
+router.get('/get/:senderId/:recipientId', (req, res) => {
+	//TODO: implement later on
+	// to add in future
+	// using *Id's we get the public keys of each user
+});
+
 module.exports = router;

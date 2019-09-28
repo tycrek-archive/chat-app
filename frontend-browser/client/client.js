@@ -82,6 +82,15 @@ window.createChat = function () {
 	}
 }
 
+window.getChat = function () {
+	let token = Cookies.get('token');
+	if (token == null) alert('Please sign in');
+	else {
+		//TODO: implement to get public keys before listing messages
+		// to add in future
+	}
+}
+
 ////////////////
 ////////////////
 //  Messages  //
@@ -93,7 +102,6 @@ window.sendMessage = function () {
 	else {
 		let chatId = $('#chatId').val();
 		let message = $('#message').val();
-		let recipient = $('#recipient').val();
 		let pubKeySender = Cookies.get('pubkey2');
 		let pubKeyRecipient = Cookies.get('pubKeyTemp');
 
