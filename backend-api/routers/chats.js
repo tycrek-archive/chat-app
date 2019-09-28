@@ -7,21 +7,25 @@ router.get('/create/:recipientName', (req, res) => {
 	let token = req.query.token;
 	let recipientName = req.params.recipientName;
 
-	let chatId, senderId, recipientId;
+	let senderId, recipientId, chatId1, chatId2;
 	Psql.sessionGet(token)
 		.then((dataset) => dataset[0].userid)
 		.then((mSenderId) => senderId = mSenderId)
+
 		.then(() => Psql.userInfo(true, recipientName))
 		.then((dataset) => dataset[0].userid)
 		.then((mRecipientId) => recipientId = mRecipientId)
+
 		.then(() => Crypto.generateUuid())
-		.then((mChatId) => chatId = mChatId)
-		.then(() => Psql.chatsCreate(chatId, senderId, recipientId))
-		.then(() => {
-			let template = Utils.config.response.success;
-			let response = Utils.buildResponse(template, { chatId: chatId });
-			return response;
-		})
+		.then((mChatId1) => chatId1 = mChatId1)
+
+		.then(() => Crypto.generateUuid())
+		.then((mChatId2) => chatId2 = mChatId2)
+
+		.then(() => Psql.chatsCreate(chatId1, senderId, recipientId, chatId2))
+		.then(() => Psql.chatsCreate(chatId2, recipientId, senderId, chatId1))
+
+		.then(() => Utils.buildResponse(Utils.config.response.success))
 		.catch((err) => Utils.buildError(err))
 		.then((response) => Utils.respond(res, response));
 });
@@ -35,9 +39,10 @@ router.get('/list', (req, res) => {
 		.then((dataset) => {
 			let template = Utils.config.response.success;
 			let response = Utils.buildResponse(template, { chats: dataset });
-			Utils.respond(res, response);
+			return response;
 		})
-		.catch((err) => Utils.respond(res, err));
+		.catch((err) => Utils.buildError(err))
+		.then((response) => Utils.respond(res, response));
 });
 
 module.exports = router;

@@ -59,9 +59,9 @@ exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.creat
 
 exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privkey' : 'pubkey']);
 
-exports.chatsCreate = (chatId, senderId, recipientId) => query(QUERIES.chats.create, [chatId, senderId, recipientId]);
+exports.chatsCreate = (chatId, senderId, recipientId, partnerId) => query(QUERIES.chats.create, [chatId, senderId, recipientId, partnerId]);
 
-exports.chatsList = (userId) => query(QUERIES.chats.list, [userId, userId]);
+exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
 
 exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
 
