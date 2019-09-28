@@ -47,6 +47,11 @@ window.login = function () {
 		.then(() => pageChats());
 }
 
+////////////////
+////////////////
+//    Chats   //
+////////////////
+////////////////
 window.listChats = function () {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
@@ -78,7 +83,11 @@ window.createChat = function () {
 	}
 }
 
-window.sendMessage = function (chatId) {
+////////////////
+////////////////
+//  Messages  //
+////////////////
+////////////////
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
