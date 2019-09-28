@@ -93,28 +93,6 @@ window.createChat = function () {
 	}
 }
 
-window.getChat = function (chatId) {
-	let token = Cookies.get('token');
-	if (token == null) alert('Please sign in');
-	else {
-		console.log(chatId);
-		/*
-
-		get the Chat where user is Sender
-		- chatId
-		- partnerId
-		- senderId
-		- recipientId
-
-		GET from Messages where chatid is chatId or partnerId order by time desc
-		GET pubkey2 from users where userid is recipientid
-
-		*/
-		this.fetch(`${BASE}`)//TODO: I think I messed up, server-side behaves different
-		this.fetch(`${BASE}/getWithUuid/${recipientId}`)
-	}
-}
-
 ////////////////
 ////////////////
 //  Messages  //
