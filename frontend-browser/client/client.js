@@ -74,8 +74,7 @@ window.createChat = function () {
 			.then((json) => {
 				if (json.code != 200) this.alert(json.reason);
 				else return json.data.chatId;
-			})
-			.then((chatId) => sendMessage(chatId));
+			});
 	}
 }
 
