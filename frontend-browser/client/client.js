@@ -94,12 +94,11 @@ window.createChat = function () {
 	}
 }
 
-window.getChat = function () {
+window.getChat = function (chatId) {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
-		//TODO: implement to get public keys before listing messages
-		// to add in future
+		console.log(chatId);
 	}
 }
 
