@@ -1,9 +1,10 @@
 // Functions within this file are responsible for fetching HTML and updating the UI
 
-window.fetchPage = function (route) {
+window.fetchPage = function (route, callback = null) {
 	this.fetch(route)
 		.then((res) => res.text())
-		.then((text) => $('#content').html(text));
+		.then((text) => $('#content').html(text))
+		.then(() => callback && callback());
 };
 
 window.pageNewUser = function () {
@@ -18,6 +19,8 @@ window.pageChats = function () {
 	fetchPage('/html/chats.html');
 };
 
-window.pageMessages = function () {
-	fetchPage('/html/messages.html');
+window.pageMessages = function (chatId) {
+	fetchPage('/html/messages.html', () => {
+		listMessages(chatId);
+	});
 };
