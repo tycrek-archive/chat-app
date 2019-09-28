@@ -42,6 +42,7 @@ window.login = function () {
 		.then((data) => {
 			Cookies.set('unlockkey', decrypt(data.user.unlockkey, data.user.privkey1, atob(password)));
 			Cookies.set('token', data.token, { expires: 7 });
+			Cookies.set('pubkey2', btoa(data.user.pubkey2));
 			Cookies.set('privkey2', btoa(data.user.privkey2));
 		})
 		.then(() => pageChats());
