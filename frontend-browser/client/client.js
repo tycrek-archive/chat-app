@@ -70,10 +70,9 @@ window.listChats = function () {
 				if (json.code != 200) this.alert(json.reason);
 				else {
 					json.data.chats.forEach((chat) => {
-						let name = chat.chatid;
-						let chatid = chat.chatid;
+						let name = chat.username;
 						let renderer = Handlebars.compile(template);
-						let result = renderer({ name: name, chatid: chatid });
+						let result = renderer({ name: name });
 						$('#chat-list').append(result);
 					});
 				}
