@@ -2,6 +2,8 @@ const HOST = 'localhost';
 const PORT = 34682;
 const BASE = `http://${HOST}:${PORT}`;
 
+let Handlebars = require('handlebars');
+
 window.tokenCheck = function () {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
@@ -57,13 +59,24 @@ window.listChats = function () {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
-		this.fetch(`${BASE}/chats/list?token=${token}`)
+		let template;
+		this.fetch('/html/chat_item.html')
+			.then((res) => res.text())
+			.then((text) => template = text)
+			.then(() => this.fetch(`${BASE}/chats/list?token=${token}`))
 			.then((res) => res.json())
 			.then((json) => {
 				$('#loading').hide();
 				if (json.code != 200) this.alert(json.reason);
 				else {
-					$('#chat-list').html(JSON.stringify(json.data.chats, null, 4));
+					//$('#chat-list').html(JSON.stringify(json.data.chats, null, 4));
+					json.data.chats.forEach((chat) => {
+						let name = chat.chatid;
+						let chatid = chat.chatid;
+						let renderer = Handlebars.compile(template);
+						let result = renderer({ name: name, chatid: chatid });
+						$('#chat-list').append(result);
+					});
 				}
 			});
 	}
@@ -135,12 +148,11 @@ window.sendMessage = function () {
 	}
 }
 
-window.listMessages = function () {
+window.listMessages = function (chatId) {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
 		$('#loading').show();
-		let chatId = $('#chatId').val();
 		this.fetch(`${BASE}/messages/list/${chatId}?token=${token}`)
 			.then((res) => res.json())
 			.then((json) => {
