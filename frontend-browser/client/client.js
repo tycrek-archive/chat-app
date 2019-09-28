@@ -77,10 +77,8 @@ window.createChat = function () {
 
 		this.fetch(`${BASE}/chats/create/${recipient}?token=${token}`)
 			.then((res) => res.json())
-			.then((json) => {
-				if (json.code != 200) this.alert(json.reason);
-				else return json.data.chatId;
-			});
+			.then((json) => json.code != 200 && this.alert(json.reason))
+			.then(() => pageChats());
 	}
 }
 
@@ -89,11 +87,28 @@ window.createChat = function () {
 //  Messages  //
 ////////////////
 ////////////////
+window.sendMessage = function () {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
+		let chatId = $('#chatId').val();
 		let message = $('#message').val();
 		let recipient = $('#recipient').val();
+		let pubKeySender = Cookies.get('pubkey2');
+		let pubKeyRecipient = Cookies.get('pubKeyTemp');
+
+		let encryptedSender = encrypt(message, pubKeySender);
+		let encodedSender = this.btoa(encryptedSender);
+
+		let encryptedRecipient = encrypt(message, pubKeyRecipient);
+		let encodedRecipient = this.btoa(encryptedRecipient);
+
+		let senderId = Cookies.get('senderIdTemp');
+		let recipientId = Cookies.get('recipientIdTemp');
+
+		this.fetch(`${BASE}/messages/create/${chatId}/${encoded}?token=${token}`)
+			.then((res) => res.json())
+			.then((json) => json);
 
 		this.fetch(`${BASE}/keypairs/public/${recipient}?token=${token}`)
 			.then((res) => res.json())
