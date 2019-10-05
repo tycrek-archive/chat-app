@@ -9,7 +9,7 @@ var Utils = require('./utils');
 // Salt rounds set in config.json
 exports.generateHash = (password) => {
 	return new Promise((resolve, reject) => {
-		bcrypt.genSalt(Utils.config().security.saltRounds)
+		bcrypt.genSalt(Utils.config.security.saltRounds)
 			.then((salt) => bcrypt.hash(password, salt))
 			.then((hash) => resolve(hash))
 			.catch((err) => reject(err));
@@ -29,25 +29,39 @@ exports.comparePassHash = (password, hash) => {
 exports.generateUuid = () => uuidv4();
 
 // Generate a hex token of length 32 (string length = 64 after converting bytes to hex)
-exports.generateToken = (length = Utils.config().security.tokenLength) => crypto.randomBytes(length).toString('hex');
+exports.generateToken = (length = Utils.config.security.tokenLength) => crypto.randomBytes(length).toString('hex');
 
 // Check if the password meets the requirements
 exports.passwordMeetsRequirements = (password) => {
 	let MIN_LENGTH = 12;
 	let MIN_EACH = 1;
-	let LOWER = new RegExp(/([a-z])/g);
+	let LOWER = new RegExp(/[a-z]/g);
 	let UPPER = new RegExp(/[A-Z]/g);
 	let NUMBER = new RegExp(/[0-9]/g);
-	let SYMBOL = new RegExp(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g);
-	//TODO: Fix regex (do I need to have () or not?)
-	//TODO: Any characters not included in the above should be denied (maybe?)
+	let SYMBOL = new RegExp(/[`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
+	let ALLOWED_CHARS = RegExp(/[A-z0-9`~!@#$%^&*()\-_=+\[{\]}\\|;:'",<.>\/?]/g);
 
 	if (
 		password.length >= MIN_LENGTH &&
 		password.match(LOWER).length >= MIN_EACH &&
 		password.match(UPPER).length >= MIN_EACH &&
 		password.match(NUMBER).length >= MIN_EACH &&
-		password.match(SYMBOL).length >= MIN_EACH
+		password.match(SYMBOL).length >= MIN_EACH &&
+		password.length == password.match(ALLOWED_CHARS).length
+	) return true;
+	else return false;
+}
+
+exports.usernameMeetsRequirements = (username) => {
+	let MAX_LENGTH = 24;
+	let MIN_LENGTH = 3;
+	let REGEX = /[A-z0-9._]/g
+	let ALLOWED_CHARS = new RegExp(REGEX);
+
+	if (
+		username.length <= MAX_LENGTH &&
+		username.length >= MIN_LENGTH &&
+		username.length == username.match(ALLOWED_CHARS).length
 	) return true;
 	else return false;
 }

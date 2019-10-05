@@ -1,4 +1,4 @@
-var utils = require('../utils');
+var Utils = require('../utils');
 var fse = require('fs-extra');
 const { Pool, Client } = require('pg');
 var format = require('pg-format');
@@ -9,7 +9,7 @@ var QUERIES = {};
 // Initialize connection pool and read queries into RAM
 exports.init = () => {
 	return new Promise((resolve, reject) => {
-		fse.readJson(utils.getPath('sql/auth.json'))
+		fse.readJson(Utils.getPath('sql/auth.json'))
 			.then((obj) => pool = new Pool(obj))
 			.then(() => _loadQueries())
 			.then(() => resolve())
@@ -18,10 +18,10 @@ exports.init = () => {
 
 	function _loadQueries() {
 		return new Promise((resolve, reject) => {
-			let total = utils.config().qs.length;
+			let total = Utils.config.qs.length;
 			let count = 0;
 
-			utils.config().qs.forEach((query) => {
+			Utils.config.qs.forEach((query) => {
 				let category = query.split('.')[0];
 				let command = query.split('.')[1];
 
@@ -32,12 +32,12 @@ exports.init = () => {
 			function _readQuery(category, command, resolve, reject) {
 				let fullPath = `sql/queries/${category}.${command}.sql`;
 
-				fse.readFile(utils.getPath(fullPath))
+				fse.readFile(Utils.getPath(fullPath))
 					.then((bytes) => {
 						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
 
 						QUERIES[category][command] = bytes.toString();
-						(count++, count === total) && resolve();
+						(count++ , count === total) && resolve();
 					})
 					.catch((err) => reject(err));
 			}
@@ -45,19 +45,30 @@ exports.init = () => {
 	}
 }
 
-exports.userCreate = (name, uuid, hash) => query(QUERIES.user.create, [name, uuid, hash]);
+exports.userCreate = (values) => query(QUERIES.user.create, values);
+exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']);
 
-exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'name' : 'uuid']);
 
 exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
-
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
 
-exports.anyQuery = (text) => query(text);
+
+exports.anyQuery = (text, values, array) => query(text, values, array);
+
 
 exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
-
 exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privkey' : 'pubkey']);
+
+
+exports.chatsCreate = (userA, userB) => query(QUERIES.chats.create, [userA, userB]);
+exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
+exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
+exports.chatsExist = (userA, userB) => query(QUERIES.chats.exist, [userA, userB, userB, userA]);
+
+
+exports.messagesCreate = (messageId, data, senderId, recipientId, original) => query(QUERIES.messages.create, [messageId, data, senderId, recipientId, original]);
+exports.messagesList = (userA, userB) => query(QUERIES.messages.list, [userA, userB, userB, userA]);
+exports.messagesGet = (messageId) => query(QUERIES.messages.get, [messageId]);
 
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {

@@ -1,0 +1,12 @@
+{
+	"server": {
+		"port": 8085,
+		"https": false,
+		"privateKey": "",
+		"fullchain": ""
+	},
+
+	"client": {
+		"files": ["client.js", "pages.js", "crypto.js"]
+	}
+}

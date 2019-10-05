@@ -6,7 +6,9 @@ var compression = require('compression');
 var utils = require('./utils');
 var Routers = {
 	user: require('./routers/user'),
-	keypairs: require('./routers/keypairs')
+	keypairs: require('./routers/keypairs'),
+	chats: require('./routers/chats'),
+	messages: require('./routers/messages')
 };
 
 // Express setup
@@ -17,6 +19,8 @@ app.use(compression());
 
 // Check authentication requirements for all routes
 app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	utils.validate(req)
 		.then(() => next())
 		.catch((err) => utils.respond(res, err));
@@ -42,12 +46,14 @@ app.get('/bundle.js', (_req, res) => {
 	require('fs-extra').readFile(utils.getPath('bundle.js'))
 		.then((bytes) => bytes.toString())
 		.then((data) => utils.respond(res, data, 200, 'js'))
-		.catch((err) => utils.respond(res, utils.config().response.error));
+		.catch((err) => utils.respond(res, utils.config.response.error));
 });
 
 // Router for any 'user' routes
 app.use('/user', Routers.user);
 app.use('/keypairs', Routers.keypairs);
+app.use('/chats', Routers.chats);
+app.use('/messages', Routers.messages);
 
 // Initialize and host the server
 utils.init()

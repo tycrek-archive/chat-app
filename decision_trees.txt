@@ -1,0 +1,84 @@
+Private key decryption process:
+
+- password not used for decryption, instead a unique "key" is generated for that user.
+- on signup, that key is generated and encrypted using PubKey1. PrivKey1 is used to decrypt it using the password on login...
+- on login, the user enters their password and is validated. if good, the user is send both PrivKey1 and PrivKey2. PrivKey1 is decrypted DURING login using the password from the password field, and after decryption we have the unlock key for PrivKey2.
+- this unlock Key is used to decrypt messages encrypted using PubKey2
+- unlock key is stored as a cookie, and keypair2 is stored in window.localStorage
+- Variables used for this somewhat complicated process:
+	- Password (sign in; decrypt PrivKey1)
+	- UnlockKey (used to decrypt PrivKey2)
+	- Keypair1 (used to encrypt/decrypt UnlockKey with Password)
+	- Keypair2 (used to encrypt/decrypt messages with UnlockKey)
+- Why??
+	- Potentially more secure as the users password is **not** stored locally
+	- To get the unlock key, attackers would still need the password anyways. Without the unlock key, they could still decrypt if the password was compromised.
+	- This is primarily to add extra security to the users password, providing they also make an effort to protect it.
+
+
+On User Create:
+
+1. Client side input validation:
+	1. username meets requirements
+		- min 3
+		- max 24
+		- only letters, numbers, periods, hyphen, underscore
+	2. password meets requirements?
+		- min 12
+		- max 128
+		- lower, upper, number, symbols required
+2. Encode both to base64
+3. Send to server
+4. Decode from base64
+5. Server side input validation
+	- same as listed above
+	BAD: send loginError 400
+	GOOD: continue -->
+6. Check if username exists in SQL
+	BAD: send loginError 400
+	GOOD: continue -->
+7. SQL User Create
+	1. Generate UUID
+	2. Generate password hash
+	3. Generate keypairs
+8. SQL transactional query
+	BAD: revert queries, send 500 error
+	GOOD: return 200 success
+
+
+On User Login:
+
+1. Encode username/password to base64
+2. Send to server
+3. Decode from base64
+4. SQL UserInfo
+5. Dataset Zero rows
+	BAD: respond loginError 400
+	GOOD: return UUID and hash
+6. Compare password with hash
+	BAD: respond loginError 400
+	GOOD: continue -->
+7. Generate token and UUID
+8. SQL SessionCreate
+	BAD: send 500 error
+	GOOD: send 200 success with token
+
+
+On Chat Create:
+
+1. Create two chats
+	- swap sender and recipient on both
+
+On Send Message:
+
+1. Fetch Public Key of recipient
+2. Encrypt data with Public Keys of both sender and recipient
+3. Encode recipient and datas to base64
+4. Send to server
+5. Create two new Messages:
+	1. Recipients copy
+		- can be decrypted with recipient private key
+		- chatId is one where recipient is recipient
+	2. Sender copy
+		- can be decrypted with sender private key
+		- chatId is one where sender is sender
