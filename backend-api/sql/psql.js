@@ -37,7 +37,7 @@ exports.init = () => {
 						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
 
 						QUERIES[category][command] = bytes.toString();
-						(count++, count === total) && resolve();
+						(count++ , count === total) && resolve();
 					})
 					.catch((err) => reject(err));
 			}
@@ -53,7 +53,7 @@ exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.cr
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
 
 
-exports.anyQuery = (text) => query(text);
+exports.anyQuery = (text, values, array) => query(text, values, array);
 
 
 exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
