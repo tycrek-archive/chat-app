@@ -66,8 +66,8 @@ exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
 exports.chatsExist = (userA, userB) => query(QUERIES.chats.exist, [userA, userB, userB, userA]);
 
 
-exports.messagesCreate = (messageId, chatId, data, timestamp, senderId, recipientId) => query(QUERIES.messages.create, [messageId, chatId, data, /*timestamp,*/ senderId, recipientId]);
-exports.messagesList = (chatId) => query(QUERIES.messages.list, [chatId]);
+exports.messagesCreate = (messageId, data, senderId, recipientId, original) => query(QUERIES.messages.create, [messageId, data, senderId, recipientId, original]);
+exports.messagesList = (userA, userB) => query(QUERIES.messages.list, [userA, userB, userB, userA]);
 exports.messagesGet = (messageId) => query(QUERIES.messages.get, [messageId]);
 
 function query(text, values, array) {

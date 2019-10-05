@@ -19,8 +19,8 @@ window.pageChats = function () {
 	fetchPage('/html/chats.html');
 };
 
-window.pageMessages = function (name) {
+window.pageMessages = function (userId) {
 	fetchPage('/html/messages.html', () => {
-		listMessages(name);
+		listMessages(userId);
 	});
 };

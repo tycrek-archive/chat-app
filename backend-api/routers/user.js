@@ -118,4 +118,20 @@ router.get('/getWithUuid/:recipientId', (req, res) => {
 		.then((response) => Utils.respond(res, response));
 });
 
+router.get('/getName/:userId', (req, res) => {
+	let token = req.query.token;
+	let userId = req.params.userId;
+
+	Psql.userInfo(false, userId)
+		.then((dataset) => Utils.datasetEmpty(dataset))
+		.then((dataset) => dataset[0].username)
+		.then((username) => {
+			let template = Utils.config.response.success;
+			let response = Utils.buildResponse(template, { username: username });
+			return response;
+		})
+		.catch((err) => Utils.buildError(err))
+		.then((response) => Utils.respond(res, response));
+});
+
 module.exports = router;

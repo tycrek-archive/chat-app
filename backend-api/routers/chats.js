@@ -47,10 +47,11 @@ router.get('/create/:recipientName', (req, res) => {
 		.then((dataset) => dataset[0].userid)
 		.then((userId) => userB = userId)
 
-		.then(() => Psql.chatsExist(userA, userB))
-		.then((dataset) => Utils.datasetEmpty(dataset))
+		//.then(() => Psql.chatsExist(userA, userB))
+		//.then((dataset) => Utils.datasetEmpty(dataset))
 
 		.then(() => Psql.chatsCreate(userA, userB))
+		.then(() => Psql.chatsCreate(userB, userA))
 
 		.then(() => Utils.config.response.success)
 		.catch((err) => Utils.buildError(err, Utils.config.response.error))
@@ -70,12 +71,6 @@ router.get('/list', (req, res) => {
 		})
 		.catch((err) => Utils.buildError(err))
 		.then((response) => Utils.respond(res, response));
-});
-
-router.get('/get/:senderId/:recipientId', (req, res) => {
-	//TODO: implement later on
-	// to add in future
-	// using *Id's we get the public keys of each user
 });
 
 module.exports = router;

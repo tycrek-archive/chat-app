@@ -1,1 +1,0 @@
-INSERT INTO keypairs(uuid, pubKey, privKey) VALUES($1, $2, $3);

@@ -1,18 +1,18 @@
 INSERT INTO messages(
 	message_id,
-	chat_id,
 	read,
 	data,
 	time,
-	sender_id,
-	recipient_id
+	senderid,
+	recipientid,
+	original
 )
 VALUES(
 	$1,
-	$2,
 	false,
-	$3,
+	$2,
 	timezone('UTC'::text, (now())),
+	$3,
 	$4,
 	$5
 );

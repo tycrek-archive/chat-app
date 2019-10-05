@@ -1,1 +1,1 @@
-SELECT * FROM chats WHERE usera = $1 OR userb = $2;
+SELECT username,userid FROM users WHERE userid = ANY (ARRAY(SELECT chats FROM users WHERE userid = $1));

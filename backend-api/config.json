@@ -5,39 +5,39 @@
 		"privateKey": "",
 		"fullchain": ""
 	},
-
 	"security": {
 		"saltRounds": 10,
 		"tokenLength": 32
 	},
-
-	"publicRoutes": ["/user/login", "/user/create", "/favicon.ico", "/bundle.js"],
-	"adminRoutes": ["/query"],
+	"publicRoutes": [
+		"/user/login",
+		"/user/create",
+		"/favicon.ico",
+		"/bundle.js"
+	],
+	"adminRoutes": [
+		"/query"
+	],
 	"routes": {
-		"user": ["login", "logout"]
+		"user": [
+			"login",
+			"logout"
+		]
 	},
 	"qs": [
 		"session.create",
 		"session.renew",
 		"session.expire",
 		"session.get",
-
 		"user.create",
 		"user.info",
-
-		"keypairs.create",
-		"keypairs.get",
-
 		"chats.create",
 		"chats.list",
-		"chats.get",
 		"chats.exist",
-
 		"messages.create",
 		"messages.list",
 		"messages.get"
 	],
-
 	"response": {
 		"success": {
 			"code": 200,

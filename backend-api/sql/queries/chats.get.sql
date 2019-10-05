@@ -1,1 +1,0 @@
-SELECT * FROM chats WHERE chatid = $1;

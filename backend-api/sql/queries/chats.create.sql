@@ -1,1 +1,1 @@
-INSERT INTO chats(userA, userB) VALUES($1, $2);
+UPDATE users SET chats = chats || $1::uuid WHERE userid = $2;

@@ -44,8 +44,9 @@ window.login = function () {
 		.then((data) => {
 			Cookies.set('unlockkey', decrypt(data.user.unlockkey, data.user.privkey1, atob(password)));
 			Cookies.set('token', data.token, { expires: 7 });
-			Cookies.set('pubkey2', btoa(data.user.pubkey2));
-			Cookies.set('privkey2', btoa(data.user.privkey2));
+			Cookies.set('pubkey2', data.user.pubkey2);
+			Cookies.set('privkey2', data.user.privkey2);
+			Cookies.set('userid', data.user.userid);
 		})
 		.then(() => pageChats());
 }
@@ -70,9 +71,10 @@ window.listChats = function () {
 				if (json.code != 200) this.alert(json.reason);
 				else {
 					json.data.chats.forEach((chat) => {
+						let userId = chat.userid
 						let name = chat.username;
 						let renderer = Handlebars.compile(template);
-						let result = renderer({ name: name });
+						let result = renderer({ name: name, userId: userId });
 						$('#chat-list').append(result);
 					});
 				}
@@ -102,10 +104,9 @@ window.sendMessage = function () {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
-		let chatId = $('#chatId').val();
 		let message = $('#message').val();
 		let pubKeySender = Cookies.get('pubkey2');
-		let pubKeyRecipient = Cookies.get('pubKeyTemp');
+		let pubKeyRecipient = Cookies.get('pubkeytemp');
 
 		let encryptedSender = encrypt(message, pubKeySender);
 		let encodedSender = this.btoa(encryptedSender);
@@ -113,50 +114,57 @@ window.sendMessage = function () {
 		let encryptedRecipient = encrypt(message, pubKeyRecipient);
 		let encodedRecipient = this.btoa(encryptedRecipient);
 
-		let senderId = Cookies.get('senderIdTemp');
-		let recipientId = Cookies.get('recipientIdTemp');
+		let senderId = Cookies.get('userid');
+		let recipientId = Cookies.get('useridtemp');
 
-		this.fetch(`${BASE}/messages/create/${chatId}/${encoded}?token=${token}`)
-			.then((res) => res.json())
-			.then((json) => json);
+		this.fetch(`${BASE}/messages/create/${senderId}/${recipientId}/${encodedSender}/1?token=${token}`)
+			.then((res) => res.text())
+			.then(() => this.fetch(`${BASE}/messages/create/${senderId}/${recipientId}/${encodedRecipient}/0?token=${token}`))
+			.then((res) => res.text())
+			.then(() => listMessages(recipientId));
 
-		this.fetch(`${BASE}/keypairs/public/${recipient}?token=${token}`)
+		/*this.fetch(`${BASE}/messages/create/${chatId}/${encoded}?token=${token}`)
 			.then((res) => res.json())
-			.then((json) => {
-				if (json.code != 200) this.alert(json.reason);
-				else return json.data.pubKey;
-			})
-			.then((pubKey) => encrypt(message, pubKey))
-			.then((encrypted) => this.btoa(encrypted))
-			.then((encoded) => this.fetch(`${BASE}/messages/create/${chatId}/${encoded}?token=${token}`))
-			.then((res) => res.json())
-			.then((json) => {
-				if (json.code != 200) this.alert(json.reason);
-				else alert(json.reason);
-		})
+			.then((json) => json);*/
 	}
 }
 
-window.listMessages = function (chatId) {
+window.listMessages = function (recipientId) {
 	let token = Cookies.get('token');
 	if (token == null) alert('Please sign in');
 	else {
+		$('#messages-list').html('');
 		$('#loading').show();
-		this.fetch(`${BASE}/messages/list/${chatId}?token=${token}`)
+		this.fetch(`${BASE}/messages/list/${recipientId}?token=${token}`)
 			.then((res) => res.json())
 			.then((json) => {
 				$('#loading').hide();
 				if (json.code != 200) this.alert(json.reason);
-				else return json.data.messages;
+				else return json.data;
 			})
-			.then((messages) => {
+			.then((data) => {
+				let recip = data.recipient;
+				Cookies.set('useridtemp', recip.userid);
+				Cookies.set('pubkeytemp', recip.pubkey2);
 
+				let messages = data.messages;
 				for (let i = 0; i < messages.length; i++) {
 					let message = messages[i];
-					let privKey = this.localStorage.getItem('privKey');
-					let password = this.localStorage.getItem('password');
+
+					if (message.recipientid === Cookies.get('userid') && message.original) continue;
+
+					let privKey = Cookies.get('privkey2');
+					let password = Cookies.get('unlockkey');
 					let decrypted = decrypt(atob(message.data), privKey, password);
-					console.log(decrypted);
+
+					let float = message.senderid === Cookies.get('userid') ? 'right' : 'left';
+
+					let ui = `
+					<div style="text-align: ${float};">${decrypted}</div>
+					`;
+
+					$('#messages-list').append(ui);
+					//console.log(decrypted);
 				}
 			});
 	}
