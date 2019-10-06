@@ -1,4 +1,4 @@
-var fse = require('fs-extra');
+var fs = require('fs-extra');
 var { Pool } = require('pg');
 var format = require('pg-format');
 
@@ -23,7 +23,7 @@ module.exports = {
 // Initialize connection pool and read queries into RAM
 function init() {
 	return new Promise((resolve, reject) => {
-		fse.readJson(Utils.getPath('sql/auth.json'))
+		fs.readJson(Utils.getPath('sql/auth.json'))
 			.then((obj) => pool = new Pool(obj))
 			.then(() => _loadQueries())
 			.then(() => resolve())
@@ -46,7 +46,7 @@ function init() {
 			function _readQuery(category, command, resolve, reject) {
 				let fullPath = `sql/queries/${category}.${command}.sql`;
 
-				fse.readFile(Utils.getPath(fullPath))
+				fs.readFile(Utils.getPath(fullPath))
 					.then((bytes) => {
 						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
 
