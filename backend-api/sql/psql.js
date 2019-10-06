@@ -6,8 +6,21 @@ var format = require('pg-format');
 var pool = new Pool({});
 var QUERIES = {};
 
+module.exports = {
+	init: init,
+	userCreate: userCreate,
+	userInfo: userInfo,
+	sessionCreate: sessionCreate,
+	sessionGet: sessionGet,
+	chatsCreate: chatsCreate,
+	chatsList: chatsList,
+	chatsExist: chatsExist,
+	messagesCreate: messagesCreate,
+	messagesList: messagesList
+};
+
 // Initialize connection pool and read queries into RAM
-exports.init = () => {
+function init() {
 	return new Promise((resolve, reject) => {
 		fse.readJson(Utils.getPath('sql/auth.json'))
 			.then((obj) => pool = new Pool(obj))
@@ -45,19 +58,18 @@ exports.init = () => {
 	}
 }
 
-exports.userCreate = (values) => query(QUERIES.user.create, values);
-exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']);
+function userCreate(values) { query(QUERIES.user.create, values); }
+function userInfo(useName, value) { query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']); }
 
-exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
-exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
+function sessionCreate(sessionId, userUuid, token) { query(QUERIES.session.create, [sessionId, userUuid, token]); }
+function sessionGet(token) { query(QUERIES.session.get, [token]); }
 
-exports.chatsCreate = (userA, userB) => query(QUERIES.chats.create, [userA, userB]);
-exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
-exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
-exports.chatsExist = (userA, userB) => query(QUERIES.chats.exist, [userA, userB, userB, userA]);
+function chatsCreate(userA, userB) { query(QUERIES.chats.create, [userA, userB]); }
+function chatsList(userId) { query(QUERIES.chats.list, [userId]); }
+function chatsExist(userA, userB) { query(QUERIES.chats.exist, [userA, userB, userB, userA]); }
 
-exports.messagesCreate = (messageId, data, senderId, recipientId, original) => query(QUERIES.messages.create, [messageId, data, senderId, recipientId, original]);
-exports.messagesList = (userA, userB) => query(QUERIES.messages.list, [userA, userB, userB, userA]);
+function messagesCreate(messageId, data, senderId, recipientId, original) { query(QUERIES.messages.create, [messageId, data, senderId, recipientId, original]); }
+function messagesList(userA, userB) { query(QUERIES.messages.list, [userA, userB, userB, userA]); }
 
 function query(text, values, array) {
 	return new Promise((resolve, reject) => {
