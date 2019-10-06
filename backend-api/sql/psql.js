@@ -1,6 +1,6 @@
 var fs = require('fs-extra');
 var { Pool } = require('pg');
-var format = require('pg-format');
+var Format = require('pg-format');
 
 var Utils = require('../utils');
 
@@ -90,13 +90,13 @@ function messagesList(userA, userB) {
 	query(QUERIES.messages.list, [userA, userB, userB, userA]);
 }
 
-function query(text, values, array) {
+function query(queryFile, values, array) {
 	return new Promise((resolve, reject) => {
-		let query = {
-			text: array ? format.withArray(text, array) : text,
-			values: values
-		};
-		pool.query(query)
+		fs.readFile(Utils.getPath(queryFile))
+			.then((bytes) => bytes.toString())
+			.then((data) => array ? Format.withArray(data, array) : data)
+			.then((text) => ({ text: text, values: values }))
+			.then((query) => pool.query(query))
 			.then((result) => resolve(result.rows))
 			.catch((err) => reject(err));
 	});
