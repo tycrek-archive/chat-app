@@ -73,6 +73,7 @@ function init() {
 function userCreate(values) {
 	query(QUERIES.userCreate, values);
 }
+
 function userInfo(useName, value) {
 	query(QUERIES.userInfo, [value], [useName ? 'username' : 'userid']);
 }
@@ -80,6 +81,7 @@ function userInfo(useName, value) {
 function sessionCreate(sessionId, userUuid, token) {
 	query(QUERIES.sessionCreate, [sessionId, userUuid, token]);
 }
+
 function sessionGet(token) {
 	query(QUERIES.sessionGet, [token]);
 }
@@ -87,9 +89,11 @@ function sessionGet(token) {
 function chatsCreate(userA, userB) {
 	query(QUERIES.chatsCreate, [userA, userB]);
 }
+
 function chatsList(userId) {
 	query(QUERIES.chatsList, [userId]);
 }
+
 function chatsExist(userA, userB) {
 	query(QUERIES.chatsExist, [userA, userB, userB, userA]);
 }
@@ -97,6 +101,7 @@ function chatsExist(userA, userB) {
 function messagesCreate(messageId, data, senderId, recipientId, original) {
 	query(QUERIES.messagesCreate, [messageId, data, senderId, recipientId, original]);
 }
+
 function messagesList(userA, userB) {
 	query(QUERIES.messagesList, [userA, userB, userB, userA]);
 }
