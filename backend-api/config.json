@@ -35,8 +35,7 @@
 		"chats.list",
 		"chats.exist",
 		"messages.create",
-		"messages.list",
-		"messages.get"
+		"messages.list"
 	],
 	"response": {
 		"success": {
