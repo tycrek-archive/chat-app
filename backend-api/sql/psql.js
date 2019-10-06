@@ -1,6 +1,6 @@
 var Utils = require('../utils');
 var fse = require('fs-extra');
-const { Pool, Client } = require('pg');
+var { Pool } = require('pg');
 var format = require('pg-format');
 
 var pool = new Pool({});
