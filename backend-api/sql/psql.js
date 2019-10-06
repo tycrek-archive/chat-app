@@ -1,7 +1,8 @@
-var Utils = require('../utils');
 var fse = require('fs-extra');
 var { Pool } = require('pg');
 var format = require('pg-format');
+
+var Utils = require('../utils');
 
 var pool = new Pool({});
 var QUERIES = {};
