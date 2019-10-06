@@ -25,29 +25,6 @@ app.use((req, res, next) => {
 		.catch((err) => utils.respond(res, err));
 });
 
-// For testing ONLY
-app.get('/', (_req, res) => {
-	require('fs-extra').readFile(utils.getPath('index.html'), (err, data) => {
-		if (err) utils.respond(res, err, 500, 'text');
-		else utils.respond(res, data.toString(), 200, 'html');
-	});
-});
-
-// Also testing ONLY
-app.get('/query/:query', (req, res) => {
-	let query = utils.b642str(req.params.query);
-	require('./sql/psql').anyQuery(query)
-		.then((dataset) => utils.respond(res, dataset))
-		.catch((err) => utils.respond(res, err, 500, 'text'));
-});
-
-app.get('/bundle.js', (_req, res) => {
-	require('fs-extra').readFile(utils.getPath('bundle.js'))
-		.then((bytes) => bytes.toString())
-		.then((data) => utils.respond(res, data, 200, 'js'))
-		.catch((err) => utils.respond(res, utils.config.response.error));
-});
-
 // Router for any 'user' routes
 app.use('/user', Routers.user);
 app.use('/chats', Routers.chats);

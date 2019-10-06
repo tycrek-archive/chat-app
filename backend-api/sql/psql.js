@@ -51,8 +51,6 @@ exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useNam
 exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
 
-exports.anyQuery = (text, values, array) => query(text, values, array);
-
 exports.chatsCreate = (userA, userB) => query(QUERIES.chats.create, [userA, userB]);
 exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
 exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
