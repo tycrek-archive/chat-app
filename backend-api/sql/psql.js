@@ -4,8 +4,9 @@ var Format = require('pg-format');
 
 var Utils = require('../utils');
 
-var pool = new Pool({});
-
+/**
+ * Filename declarations for SQL queries
+ */
 var QUERIES = {
 	sessionCreate: 'session.create',
 	sessionGet: 'session.get',
@@ -18,6 +19,9 @@ var QUERIES = {
 	messagesList: 'messages.list'
 };
 
+/**
+ * Export functions for other files to access with require().
+ */
 module.exports = {
 	init: init,
 	userCreate: userCreate,
@@ -31,7 +35,13 @@ module.exports = {
 	messagesList: messagesList
 };
 
-// Initialize connection pool and read queries into RAM
+/**
+ * Initialize connection pool.
+ *
+ * Sets global variable pool.
+ *
+ * @returns {Promise} A Promise
+ */
 function init() {
 	return new Promise((resolve, reject) => {
 		fs.readJson(Utils.getPath('sql/auth.json'))
@@ -40,6 +50,27 @@ function init() {
 			.catch((err) => reject(err));
 	});
 }
+
+/**
+ * Run an SQL query.
+ * @param {String} queryFile QUERIES value with the file name
+ * @param {Array} values Values to pass to the query
+ * @param {Array} [array] Column titles for pg-format
+ * @returns {Promise} Promise containing SQL result rows
+ */
+function query(queryFile, values, array) {
+	return new Promise((resolve, reject) => {
+		fs.readFile(Utils.getPath(`sql/queries/${queryFile}.sql`))
+			.then((bytes) => bytes.toString())
+			.then((data) => array ? Format.withArray(data, array) : data)
+			.then((text) => ({ text: text, values: values }))
+			.then((query) => pool.query(query))
+			.then((result) => resolve(result.rows))
+			.catch((err) => reject(err));
+	});
+}
+
+//// Specific query functions ////
 
 function userCreate(values) {
 	return query(QUERIES.userCreate, values);
@@ -75,16 +106,4 @@ function messagesCreate(messageId, data, senderId, recipientId, original) {
 
 function messagesList(userA, userB) {
 	return query(QUERIES.messagesList, [userA, userB, userB, userA]);
-}
-
-function query(queryFile, values, array) {
-	return new Promise((resolve, reject) => {
-		fs.readFile(Utils.getPath(`sql/queries/${queryFile}.sql`))
-			.then((bytes) => bytes.toString())
-			.then((data) => array ? Format.withArray(data, array) : data)
-			.then((text) => ({ text: text, values: values }))
-			.then((query) => pool.query(query))
-			.then((result) => resolve(result.rows))
-			.catch((err) => reject(err));
-	});
 }
