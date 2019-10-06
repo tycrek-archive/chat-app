@@ -5,7 +5,18 @@ var Format = require('pg-format');
 var Utils = require('../utils');
 
 var pool = new Pool({});
-var QUERIES = {};
+
+var QUERIES = {
+	sessionCreate: 'sessions.create',
+	sessionGet: 'sessions.get',
+	userCreate: 'user.create',
+	userInfo: 'user.info',
+	chatsCreate: 'chats.create',
+	chatsList: 'chats.list',
+	chatsExist: 'chats.exist',
+	messagesCreate: 'messages.create',
+	messagesList: 'messages.list'
+};
 
 module.exports = {
 	init: init,
@@ -25,7 +36,7 @@ function init() {
 	return new Promise((resolve, reject) => {
 		fs.readJson(Utils.getPath('sql/auth.json'))
 			.then((obj) => pool = new Pool(obj))
-			.then(() => _loadQueries())
+			//.then(() => _loadQueries())
 			.then(() => resolve())
 			.catch((err) => reject(err));
 	});
@@ -60,39 +71,39 @@ function init() {
 }
 
 function userCreate(values) {
-	query(QUERIES.user.create, values);
+	query(QUERIES.userCreate, values);
 }
 function userInfo(useName, value) {
-	query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']);
+	query(QUERIES.userInfo, [value], [useName ? 'username' : 'userid']);
 }
 
 function sessionCreate(sessionId, userUuid, token) {
-	query(QUERIES.session.create, [sessionId, userUuid, token]);
+	query(QUERIES.sessionCreate, [sessionId, userUuid, token]);
 }
 function sessionGet(token) {
-	query(QUERIES.session.get, [token]);
+	query(QUERIES.sessionGet, [token]);
 }
 
 function chatsCreate(userA, userB) {
-	query(QUERIES.chats.create, [userA, userB]);
+	query(QUERIES.chatsCreate, [userA, userB]);
 }
 function chatsList(userId) {
-	query(QUERIES.chats.list, [userId]);
+	query(QUERIES.chatsList, [userId]);
 }
 function chatsExist(userA, userB) {
-	query(QUERIES.chats.exist, [userA, userB, userB, userA]);
+	query(QUERIES.chatsExist, [userA, userB, userB, userA]);
 }
 
 function messagesCreate(messageId, data, senderId, recipientId, original) {
-	query(QUERIES.messages.create, [messageId, data, senderId, recipientId, original]);
+	query(QUERIES.messagesCreate, [messageId, data, senderId, recipientId, original]);
 }
 function messagesList(userA, userB) {
-	query(QUERIES.messages.list, [userA, userB, userB, userA]);
+	query(QUERIES.messagesList, [userA, userB, userB, userA]);
 }
 
 function query(queryFile, values, array) {
 	return new Promise((resolve, reject) => {
-		fs.readFile(Utils.getPath(queryFile))
+		fs.readFile(Utils.getPath(`sql/queries/${queryFile}.sql`))
 			.then((bytes) => bytes.toString())
 			.then((data) => array ? Format.withArray(data, array) : data)
 			.then((text) => ({ text: text, values: values }))
