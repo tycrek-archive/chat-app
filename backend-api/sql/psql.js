@@ -7,8 +7,8 @@ var Utils = require('../utils');
 var pool = new Pool({});
 
 var QUERIES = {
-	sessionCreate: 'sessions.create',
-	sessionGet: 'sessions.get',
+	sessionCreate: 'session.create',
+	sessionGet: 'session.get',
 	userCreate: 'user.create',
 	userInfo: 'user.info',
 	chatsCreate: 'chats.create',
@@ -71,39 +71,39 @@ function init() {
 }
 
 function userCreate(values) {
-	query(QUERIES.userCreate, values);
+	return query(QUERIES.userCreate, values);
 }
 
 function userInfo(useName, value) {
-	query(QUERIES.userInfo, [value], [useName ? 'username' : 'userid']);
+	return query(QUERIES.userInfo, [value], [useName ? 'username' : 'userid']);
 }
 
 function sessionCreate(sessionId, userUuid, token) {
-	query(QUERIES.sessionCreate, [sessionId, userUuid, token]);
+	return query(QUERIES.sessionCreate, [sessionId, userUuid, token]);
 }
 
 function sessionGet(token) {
-	query(QUERIES.sessionGet, [token]);
+	return query(QUERIES.sessionGet, [token]);
 }
 
 function chatsCreate(userA, userB) {
-	query(QUERIES.chatsCreate, [userA, userB]);
+	return query(QUERIES.chatsCreate, [userA, userB]);
 }
 
 function chatsList(userId) {
-	query(QUERIES.chatsList, [userId]);
+	return query(QUERIES.chatsList, [userId]);
 }
 
 function chatsExist(userA, userB) {
-	query(QUERIES.chatsExist, [userA, userB, userB, userA]);
+	return query(QUERIES.chatsExist, [userA, userB, userB, userA]);
 }
 
 function messagesCreate(messageId, data, senderId, recipientId, original) {
-	query(QUERIES.messagesCreate, [messageId, data, senderId, recipientId, original]);
+	return query(QUERIES.messagesCreate, [messageId, data, senderId, recipientId, original]);
 }
 
 function messagesList(userA, userB) {
-	query(QUERIES.messagesList, [userA, userB, userB, userA]);
+	return query(QUERIES.messagesList, [userA, userB, userB, userA]);
 }
 
 function query(queryFile, values, array) {
