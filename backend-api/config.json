@@ -26,8 +26,6 @@
 	},
 	"qs": [
 		"session.create",
-		"session.renew",
-		"session.expire",
 		"session.get",
 		"user.create",
 		"user.info",
