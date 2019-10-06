@@ -1,7 +1,4 @@
-var fse    = require('fs-extra');
-var uuidv4 = require('uuid/v4');
-var crypto = require('crypto');
-var bcrypt = require('bcrypt');
+var fse = require('fs-extra');
 var moment = require('moment');
 
 var Psql = require('./sql/psql');
@@ -93,7 +90,7 @@ exports.validate = (req) => {
 }
 
 // Build a JSON response object to send to clients
-exports.buildNewResponse = (code, reason, data={}) => {
+exports.buildNewResponse = (code, reason, data = {}) => {
 	let response = {
 		code: code,
 		reason: reason,
