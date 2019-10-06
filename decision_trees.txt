@@ -1,3 +1,11 @@
+!!!!!!!!!!
+
+THIS FILE IS OLD AND SHOULD BE IGNORED
+It is kept for historical purposes
+
+!!!!!!!!!!
+
+
 Private key decryption process:
 
 - password not used for decryption, instead a unique "key" is generated for that user.
