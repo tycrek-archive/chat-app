@@ -4,9 +4,6 @@ var moment = require('moment');
 var Psql = require('./sql/psql');
 var Utils = this;
 
-//var config = {};
-//exports.config = () => config;
-
 // Initialize the server
 exports.init = () => {
 	return new Promise((resolve, reject) => {
