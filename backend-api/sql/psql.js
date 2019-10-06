@@ -48,23 +48,15 @@ exports.init = () => {
 exports.userCreate = (values) => query(QUERIES.user.create, values);
 exports.userInfo = (useName, value) => query(QUERIES.user.info, [value], [useName ? 'username' : 'userid']);
 
-
 exports.sessionCreate = (sessionId, userUuid, token) => query(QUERIES.session.create, [sessionId, userUuid, token]);
 exports.sessionGet = (token) => query(QUERIES.session.get, [token]);
 
-
 exports.anyQuery = (text, values, array) => query(text, values, array);
-
-
-exports.keypairsCreate = (uuid, pubKey, privKey) => query(QUERIES.keypairs.create, [uuid, pubKey, privKey]);
-exports.keypairsGet = (getPrivate, uuid) => query(QUERIES.keypairs.get, [uuid], [getPrivate ? 'privkey' : 'pubkey']);
-
 
 exports.chatsCreate = (userA, userB) => query(QUERIES.chats.create, [userA, userB]);
 exports.chatsList = (userId) => query(QUERIES.chats.list, [userId]);
 exports.chatsGet = (chatId) => query(QUERIES.chats.get, [chatId]);
 exports.chatsExist = (userA, userB) => query(QUERIES.chats.exist, [userA, userB, userB, userA]);
-
 
 exports.messagesCreate = (messageId, data, senderId, recipientId, original) => query(QUERIES.messages.create, [messageId, data, senderId, recipientId, original]);
 exports.messagesList = (userA, userB) => query(QUERIES.messages.list, [userA, userB, userB, userA]);

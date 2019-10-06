@@ -1,12 +1,11 @@
 // NPM modules
-var express     = require('express');
+var express = require('express');
 var compression = require('compression');
 
 // Local imports
 var utils = require('./utils');
 var Routers = {
 	user: require('./routers/user'),
-	keypairs: require('./routers/keypairs'),
 	chats: require('./routers/chats'),
 	messages: require('./routers/messages')
 };
@@ -51,7 +50,6 @@ app.get('/bundle.js', (_req, res) => {
 
 // Router for any 'user' routes
 app.use('/user', Routers.user);
-app.use('/keypairs', Routers.keypairs);
 app.use('/chats', Routers.chats);
 app.use('/messages', Routers.messages);
 
