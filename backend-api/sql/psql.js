@@ -36,38 +36,9 @@ function init() {
 	return new Promise((resolve, reject) => {
 		fs.readJson(Utils.getPath('sql/auth.json'))
 			.then((obj) => pool = new Pool(obj))
-			//.then(() => _loadQueries())
 			.then(() => resolve())
 			.catch((err) => reject(err));
 	});
-
-	function _loadQueries() {
-		return new Promise((resolve, reject) => {
-			let total = Utils.config.qs.length;
-			let count = 0;
-
-			Utils.config.qs.forEach((query) => {
-				let category = query.split('.')[0];
-				let command = query.split('.')[1];
-
-				_readQuery(category, command, resolve, reject);
-			});
-
-			// Read the query file
-			function _readQuery(category, command, resolve, reject) {
-				let fullPath = `sql/queries/${category}.${command}.sql`;
-
-				fs.readFile(Utils.getPath(fullPath))
-					.then((bytes) => {
-						if (!QUERIES.hasOwnProperty(category)) QUERIES[category] = {};
-
-						QUERIES[category][command] = bytes.toString();
-						(count++ , count === total) && resolve();
-					})
-					.catch((err) => reject(err));
-			}
-		});
-	}
 }
 
 function userCreate(values) {
