@@ -1,19 +1,33 @@
-var fse    = require('fs-extra');
-var uuidv4 = require('uuid/v4');
-var crypto = require('crypto');
-var bcrypt = require('bcrypt');
+var fse = require('fs-extra');
 var moment = require('moment');
 
 var Psql = require('./sql/psql');
 var Utils = this;
 
-//var config = {};
-//exports.config = () => config;
+/**
+ * Export functions for other files to access with require().
+ */
+exports.init = init;
+exports.getPath = getPath;
+exports.str2b64 = str2b64;
+exports.b642str = b642str;
+exports.respond = respond;
+exports.utcStamp = utcStamp;
+exports.tdFormat = tdFormat;
+exports.validate = validate;
+exports.buildNewResponse = buildNewResponse;
+exports.buildResponse = buildResponse;
+exports.buildError = buildError;
+exports.datasetEmpty = datasetEmpty;
+exports.datasetFull = datasetFull;
 
-// Initialize the server
-exports.init = () => {
+/**
+ * Initialize the server.
+ * @returns {Promise} Resolves if successful
+ */
+function init() {
 	return new Promise((resolve, reject) => {
-		fse.readJson(Utils.getPath('config.json'))
+		fse.readJson(getPath('config.json'))
 			.then((obj) => exports.config = obj)
 			.then(() => Psql.init())
 			.then(() => resolve(Utils.config.server))
@@ -21,32 +35,66 @@ exports.init = () => {
 	});
 }
 
-// Return full path for given filename. Calls from other directories must also specify directory.
-exports.getPath = (filename) => require('path').join(__dirname, filename);
+/**
+ * Properly builds a path for a file.
+ * @param {String} filename Relative path to the file or filename
+ * @returns {String} Full path to a file
+ */
+function getPath(filename) {
+	return require('path').join(__dirname, filename);
+}
 
-// Encode a string as Base64
-exports.str2b64 = (str) => Buffer.from(str).toString('base64');
+/**
+ * Encode a string as Base64.
+ * @param {String} str String to encode
+ * @returns {String} Base64 encoded string
+ */
+function str2b64(str) {
+	return Buffer.from(str).toString('base64');
+}
 
-// Decode Base64 data into a string
-exports.b642str = (b64) => Buffer.from(b64, 'base64').toString();
+/**
+ * Decode Base64 data into a string.
+ * @param {String} b64 String to decode
+ * @returns {String} Regular string
+ */
+function b642str(b64) {
+	return Buffer.from(b64, 'base64').toString();
+}
 
-// Send an Express response
-// (with multiple routers, having Utils done here makes more sense)
-exports.respond = (res, payload, status = 200, type = 'json') => {
+/**
+ * Send an Express.js response.
+ * @param {Express.Response} res Express.js Response object
+ * @param {String|JSON} payload Data to send to client
+ * @param {Number} [status] HTTP status code (200)
+ * @param {String} [type] HTTP Content-Type (json)
+ */
+function respond(res, payload, status = 200, type = 'json') {
 	if (payload.code) status = payload.code;
 	res.status(status);
 	res.type(type);
 	res.send(payload);
 }
 
-// Return the current UTC timestamp in Unix format
-exports.utcStamp = () => moment.utc().format('x');
+/**
+ * Return the current UTC timestamp in Unix format.
+ * @returns {String} Current UTC timestamp
+ */
+function utcStamp() {
+	return moment.utc().format('x');
+}
 
-// Convert the provided timestamp into Unix format as UTC time
-exports.tdFormat = (td, f = 'x') => moment(td, f).utc().format(f);
+/**
+ * Convert the provided timestamp into Unix format as UTC time.
+ * @param {String} td Timestamp to convert to UTC
+ * @param {String} [f] Moment.js format. Defaults to 'x' (Unix-style)
+ */
+function tdFormat(td, f = 'x') {
+	return moment(td, f).utc().format(f);
+}
 
 // Validate if a token is permitted to access the requested resource
-exports.validate = (req) => {
+function validate(req) {
 	return new Promise((resolve, reject) => {
 		let path = req.path;
 		let token = req.query.token;
@@ -93,7 +141,7 @@ exports.validate = (req) => {
 }
 
 // Build a JSON response object to send to clients
-exports.buildNewResponse = (code, reason, data={}) => {
+function buildNewResponse(code, reason, data = {}) {
 	let response = {
 		code: code,
 		reason: reason,
@@ -103,17 +151,22 @@ exports.buildNewResponse = (code, reason, data={}) => {
 	return response;
 }
 
-exports.buildResponse = (response, data = {}) => {
+function buildResponse(response, data = {}) {
 	response.data = data;
 	return response;
 }
 
-exports.buildError = (err, response = Utils.config.response.error) => {
+function buildError(err, response = Utils.config.response.error) {
 	console.log(err);
 	let tmp = JSON.stringify(err, Object.getOwnPropertyNames(err));
 	response.data = tmp;
 	return response;
 }
 
-exports.datasetEmpty = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? resolve(dataset) : reject('Dataset empty'));
-exports.datasetFull = (dataset) => new Promise((resolve, reject) => dataset.length == 0 ? reject('Dataset full') : resolve(dataset));
+function datasetEmpty(dataset) {
+	return new Promise((resolve, reject) => dataset.length == 0 ? resolve(dataset) : reject('Dataset empty'));
+}
+
+function datasetFull(dataset) {
+	return new Promise((resolve, reject) => dataset.length == 0 ? reject('Dataset full') : resolve(dataset));
+}

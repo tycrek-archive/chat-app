@@ -18,23 +18,6 @@ router.get('/create/:senderId/:recipientId/:data/:original', (req, res) => {
 			let error = Utils.buildError(err);
 			Utils.respond(res, error);
 		});
-
-
-	/*Psql.chatsGet(chatId)
-		.then((dataset) => dataset[0])
-		.then((chat) => {
-			senderId = chat.sender_id;
-			recipientId = chat.recipient_id;
-			timestamp = Utils.utcStamp();
-			messageId = Crypto.generateUuid();
-		})
-		.then(() => Psql.messagesCreate(messageId, chatId, data, timestamp, senderId, recipientId))
-		.then(() => Utils.respond(res, Utils.config.response.success))
-		.catch((err) => {
-			let template = Utils.config.response.error;
-			let response = Utils.buildResponse(template, { err: err });
-			Utils.respond(res, response);
-		});*/
 });
 
 router.get('/list/:recipientId', (req, res) => {
@@ -65,20 +48,6 @@ router.get('/list/:recipientId', (req, res) => {
 		})
 		.catch((err) => Utils.buildError(err))
 		.then((response) => Utils.respond(res, response));
-
-
-	/*
-	Psql.messagesList(chatId)
-		.then((dataset) => {
-			let template = Utils.config.response.success;
-			let response = Utils.buildResponse(template, { messages: dataset });
-			Utils.respond(res, response);
-		})
-		.catch((err) => {
-			let template = Utils.config.response.error;
-			let response = Utils.buildResponse(template, { err: err });
-			Utils.respond(res, response);
-		});*/
 });
 
 module.exports = router;
