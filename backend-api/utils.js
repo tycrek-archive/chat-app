@@ -21,7 +21,10 @@ exports.buildError = buildError;
 exports.datasetEmpty = datasetEmpty;
 exports.datasetFull = datasetFull;
 
-// Initialize the server
+/**
+ * Initialize the server.
+ * @returns {Promise} Resolves if successful
+ */
 function init() {
 	return new Promise((resolve, reject) => {
 		fse.readJson(getPath('config.json'))
@@ -32,23 +35,40 @@ function init() {
 	});
 }
 
-// Return full path for given filename. Calls from other directories must also specify directory.
+/**
+ * Properly builds a path for a file.
+ * @param {String} filename Relative path to the file or filename
+ * @returns {String} Full path to a file
+ */
 function getPath(filename) {
-	return require('path').join(__dirname, filename)
+	return require('path').join(__dirname, filename);
 }
 
-// Encode a string as Base64
+/**
+ * Encode a string as Base64.
+ * @param {String} str String to encode
+ * @returns {String} Base64 encoded string
+ */
 function str2b64(str) {
 	return Buffer.from(str).toString('base64');
 }
 
-// Decode Base64 data into a string
+/**
+ * Decode Base64 data into a string.
+ * @param {String} b64 String to decode
+ * @returns {String} Regular string
+ */
 function b642str(b64) {
 	return Buffer.from(b64, 'base64').toString();
 }
 
-// Send an Express response
-// (with multiple routers, having Utils done here makes more sense)
+/**
+ * Send an Express.js response.
+ * @param {Express.Response} res Express.js Response object
+ * @param {String|JSON} payload Data to send to client
+ * @param {Number} [status] HTTP status code (200)
+ * @param {String} [type] HTTP Content-Type (json)
+ */
 function respond(res, payload, status = 200, type = 'json') {
 	if (payload.code) status = payload.code;
 	res.status(status);
@@ -56,12 +76,19 @@ function respond(res, payload, status = 200, type = 'json') {
 	res.send(payload);
 }
 
-// Return the current UTC timestamp in Unix format
+/**
+ * Return the current UTC timestamp in Unix format.
+ * @returns {String} Current UTC timestamp
+ */
 function utcStamp() {
 	return moment.utc().format('x');
 }
 
-// Convert the provided timestamp into Unix format as UTC time
+/**
+ * Convert the provided timestamp into Unix format as UTC time.
+ * @param {String} td Timestamp to convert to UTC
+ * @param {String} [f] Moment.js format. Defaults to 'x' (Unix-style)
+ */
 function tdFormat(td, f = 'x') {
 	return moment(td, f).utc().format(f);
 }
