@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 const HOST = 'localhost';
 const PORT = 34682;
 const BASE = `http://${HOST}:${PORT}`;
